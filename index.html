@@ -99,30 +99,47 @@ a{color:#0759a5}
 const SUPABASE_URL = "https://jekxjpykhqpodzktndnz.supabase.co";
 const SUPABASE_KEY = "sb_publishable_CR3iD5C1yF_CCHiJs3gqOQ_81THSBgL";
 const FUNCTION_URL = SUPABASE_URL + "/functions/v1/clever-service";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 let currentToken = new URLSearchParams(location.search).get("token");
 let currentSession = null;
 
 async function api(action, data={}, admin=false) {
-  const headers = {"apikey": SUPABASE_KEY, "Content-Type":"application/json"};
+  const headers = {
+    "apikey": SUPABASE_KEY,
+    "Content-Type": "application/json"
+  };
+
   if(admin) {
     if(!currentSession) throw new Error("Admin login করুন");
     headers.Authorization = "Bearer " + currentSession.access_token;
   }
+
   const response = await fetch(FUNCTION_URL,{
-    method:"POST",headers,
+    method:"POST",
+    headers,
     body:JSON.stringify({action,...data})
   });
+
   const result = await response.json();
-  if(!response.ok || result.error) throw new Error(result.error || "Request failed");
+
+  if(!response.ok || result.error) {
+    throw new Error(result.error || "Request failed");
+  }
+
   return result;
 }
 
 async function uploadPDF() {
   const message = document.getElementById("uploadMessage");
+
   try {
     if(!currentSession) throw new Error("প্রথমে Admin Login করুন");
+
     const file = document.getElementById("pdfFile").files[0];
     if(!file) throw new Error("PDF ফাইল নির্বাচন করুন");
 
@@ -140,29 +157,44 @@ async function uploadPDF() {
       },
       body:form
     });
+
     const result = await response.json();
-    if(!response.ok || result.error) throw new Error(result.error || "Upload failed");
+
+    if(!response.ok || result.error) {
+      throw new Error(result.error || "Upload failed");
+    }
+
     message.textContent="PDF সফলভাবে Upload হয়েছে!";
     loadDocuments();
-  } catch(e) { message.textContent=e.message; }
+
+  } catch(e) {
+    message.textContent=e.message;
+  }
 }
 
 async function loginAdmin() {
   const message=document.getElementById("loginMessage");
+
   try {
     const {data,error}=await supabaseClient.auth.signInWithPassword({
       email:document.getElementById("email").value,
       password:document.getElementById("password").value
     });
+
     if(error) throw error;
+
     currentSession=data.session;
     showAdmin();
-  } catch(e) { message.textContent=e.message; }
+
+  } catch(e) {
+    message.textContent=e.message;
+  }
 }
 
 async function logoutAdmin() {
-  await supabase.auth.signOut();
+  await supabaseClient.auth.signOut();
   currentSession=null;
+
   document.getElementById("admin").classList.add("hidden");
   document.getElementById("login").classList.remove("hidden");
 }
@@ -170,46 +202,70 @@ async function logoutAdmin() {
 function showAdmin() {
   document.getElementById("login").classList.add("hidden");
   document.getElementById("admin").classList.remove("hidden");
+
   loadDocuments();
   loadPayments();
 }
 
 async function loadDocuments() {
   const area=document.getElementById("documents");
+
   try {
     const result=await api("admin_list_documents",{},true);
     area.innerHTML="";
+
     for(const doc of result.documents) {
       const div=document.createElement("div");
       div.className="item";
       div.textContent=doc.title+" — ৳"+doc.price+" ";
+
       const button=document.createElement("button");
       button.textContent="Client Link তৈরি করুন";
       button.onclick=()=>createLink(doc.id);
+
       div.appendChild(button);
       area.appendChild(div);
     }
-  } catch(e) { area.textContent=e.message; }
+
+  } catch(e) {
+    area.textContent=e.message;
+  }
 }
 
 async function createLink(documentId) {
   try {
-    const result=await api("admin_create_client_link",{document_id:documentId},true);
-    const url=location.origin+location.pathname+"?token="+result.client_link.client_token;
+    const result=await api(
+      "admin_create_client_link",
+      {document_id:documentId},
+      true
+    );
+
+    const url=location.origin+location.pathname+
+      "?token="+result.client_link.client_token;
+
     prompt("এই Client Link কপি করে ক্লায়েন্টকে দিন:",url);
-  } catch(e) { alert(e.message); }
+
+  } catch(e) {
+    alert(e.message);
+  }
 }
 
 async function loadPayments() {
   const area=document.getElementById("payments");
+
   try {
     const result=await api("admin_list_payments",{},true);
     area.innerHTML="";
+
     for(const p of result.payments) {
       const div=document.createElement("div");
       div.className="item";
+
       const title=p.documents?.title || "PDF";
-      div.textContent=title+" | "+p.payer_phone+" | TrxID: "+p.transaction_id+" | "+p.status+" ";
+
+      div.textContent=title+" | "+p.payer_phone+
+        " | TrxID: "+p.transaction_id+" | "+p.status+" ";
+
       if(p.status==="pending") {
         for(const status of ["approved","rejected"]) {
           const button=document.createElement("button");
@@ -218,24 +274,39 @@ async function loadPayments() {
           div.appendChild(button);
         }
       }
+
       area.appendChild(div);
     }
-  } catch(e) { area.textContent=e.message; }
+
+  } catch(e) {
+    area.textContent=e.message;
+  }
 }
 
 async function updatePayment(id,status) {
   try {
-    await api("admin_update_payment",{payment_id:id,status},true);
+    await api("admin_update_payment",{
+      payment_id:id,
+      status
+    },true);
+
     loadPayments();
-  } catch(e) { alert(e.message); }
+
+  } catch(e) {
+    alert(e.message);
+  }
 }
 
 async function loadClient() {
   try {
-    const result=await api("get_document",{client_token:currentToken});
+    const result=await api("get_document",{
+      client_token:currentToken
+    });
+
     document.getElementById("client").classList.remove("hidden");
     document.getElementById("docTitle").textContent=result.document.title;
-    document.getElementById("docDescription").textContent=result.document.description||"";
+    document.getElementById("docDescription").textContent=
+      result.document.description||"";
     document.getElementById("docPrice").textContent=result.document.price;
     document.getElementById("preview").src=result.preview_url;
 
@@ -244,6 +315,7 @@ async function loadClient() {
       document.getElementById("downloadBox").classList.remove("hidden");
       document.getElementById("downloadLink").href=result.download_url;
     }
+
   } catch(e) {
     document.getElementById("home").classList.remove("hidden");
     document.getElementById("home").textContent=e.message;
@@ -252,29 +324,44 @@ async function loadClient() {
 
 async function submitPayment() {
   const message=document.getElementById("paymentMessage");
+
   try {
     await api("submit_payment",{
       client_token:currentToken,
       payer_phone:document.getElementById("payerPhone").value,
       transaction_id:document.getElementById("trxId").value
     });
-    message.textContent="পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
-  } catch(e) { message.textContent=e.message; }
+
+    message.textContent=
+      "পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
+
+  } catch(e) {
+    message.textContent=e.message;
+  }
 }
 
-(async function start(){
-  const {data}const {data}=await supabaseClient.auth.getSession();=await supabase.auth.getSession();
-  currentSession=data.session;
+(async function start() {
+  try {
+    const {data,error}=await supabaseClient.auth.getSession();
 
-  if(currentToken) {
-    loadClient();
-  } else {
-    document.getElementById("home").classList.add("hidden");
-    if(currentSession) {
-      showAdmin();
+    if(error) throw error;
+
+    currentSession=data.session;
+
+    if(currentToken) {
+      loadClient();
     } else {
-      document.getElementById("login").classList.remove("hidden");
+      document.getElementById("home").classList.add("hidden");
+
+      if(currentSession) {
+        showAdmin();
+      } else {
+        document.getElementById("login").classList.remove("hidden");
+      }
     }
+
+  } catch(e) {
+    document.getElementById("loginMessage").textContent=e.message;
   }
 })();
 </script>
