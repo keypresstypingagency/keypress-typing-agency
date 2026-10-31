@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keypress Typing Agency</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f3f6fb;margin:0;color:#222}
+header{background:#123b68;color:white;padding:22px;text-align:center}
+main{max-width:850px;margin:25px auto;padding:15px}
+.card{background:white;padding:22px;margin:16px 0;border-radius:12px;box-shadow:0 2px 12px #0001}
+input,textarea,button{box-sizing:border-box;width:100%;padding:12px;margin:7px 0;border:1px solid #ccc;border-radius:7px}
+button{background:#145da0;color:white;border:0;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5}
+.hidden{display:none}
+iframe{width:100%;height:550px;border:1px solid #ddd}
+.small{color:#666;font-size:14px}
+.item{padding:12px;border-bottom:1px solid #ddd;overflow-wrap:anywhere}
+a{color:#0759a5}
+</style>
+</head>
+<body>
+<header>
+<h1>Keypress Typing Agency</h1>
+<p>আপনার প্রয়োজনীয় PDF সেবা</p>
+</header>
+
+<main>
+<section id="client" class="hidden">
+<div class="card">
+<h2 id="docTitle">PDF Preview</h2>
+<p id="docDescription"></p>
+<p>মূল্য: ৳<strong id="docPrice"></strong></p>
+<iframe id="preview" title="PDF Preview"></iframe>
+<p class="small">অনুমতি ছাড়া PDF কপি বা শেয়ার করবেন না। স্ক্রিনশট বা স্ক্রিন রেকর্ডিং সম্পূর্ণভাবে আটকানো সম্ভব নয়।</p>
+</div>
+
+<div class="card" id="paymentBox">
+<h3>পেমেন্ট করুন</h3>
+<p>বিকাশ / রকেট নম্বর: <strong>এখানে আপনার নম্বর বসান</strong></p>
+<input id="payerPhone" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
+<input id="trxId" placeholder="Transaction ID">
+<button onclick="submitPayment()">পেমেন্ট তথ্য জমা দিন</button>
+<p id="paymentMessage"></p>
+</div>
+
+<div class="card hidden" id="downloadBox">
+<h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
+<a id="downloadLink" href="#" target="_blank" rel="noopener">PDF Download করুন</a>
+</div>
+</section>
+
+<section id="login" class="card hidden">
+<h2>Admin Login</h2>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="loginAdmin()">Login</button>
+<p id="loginMessage"></p>
+</section>
+
+<section id="admin" class="hidden">
+<div class="card">
+<h2>Admin Dashboard</h2>
+<button onclick="logoutAdmin()">Logout</button>
+</div>
+
+<div class="card">
+<h3>নতুন PDF Upload</h3>
+<input id="pdfTitle" placeholder="PDF-এর নাম">
+<textarea id="pdfDescription" placeholder="PDF সম্পর্কে বিবরণ"></textarea>
+<input id="pdfPrice" type="number" min="0" placeholder="মূল্য (টাকা)">
+<input id="pdfFile" type="file" accept="application/pdf">
+<button onclick="uploadPDF()">PDF Upload করুন</button>
+<p id="uploadMessage"></p>
+</div>
+
+<div class="card">
+<h3>আপনার PDF তালিকা</h3>
+<button onclick="loadDocuments()">তালিকা Refresh করুন</button>
+<div id="documents"></div>
+</div>
+
+<div class="card">
+<h3>পেমেন্ট যাচাই</h3>
+<button onclick="loadPayments()">পেমেন্ট Refresh করুন</button>
+<div id="payments"></div>
+</div>
+</section>
+
+<section id="home" class="card hidden">
+<h2>Keypress Typing Agency</h2>
+<p>আপনার PDF দেখতে হলে আমাদের দেওয়া Client Link ব্যবহার করুন।</p>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://jekxjpykhqpodzktndnz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_CR3iD5C1yF_CCHiJs3gqOQ_81THSBgL";
+const FUNCTION_URL = SUPABASE_URL + "/functions/v1/clever-service";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentToken = new URLSearchParams(location.search).get("token");
+let currentSession = null;
+
+async function api(action, data={}, admin=false) {
+  const headers = {"apikey": SUPABASE_KEY, "Content-Type":"application/json"};
+  if(admin) {
+    if(!currentSession) throw new Error("Admin login করুন");
+    headers.Authorization = "Bearer " + currentSession.access_token;
+  }
+  const response = await fetch(FUNCTION_URL,{
+    method:"POST",headers,
+    body:JSON.stringify({action,...data})
+  });
+  const result = await response.json();
+  if(!response.ok || result.error) throw new Error(result.error || "Request failed");
+  return result;
+}
+
+async function uploadPDF() {
+  const message = document.getElementById("uploadMessage");
+  try {
+    if(!currentSession) throw new Error("প্রথমে Admin Login করুন");
+    const file = document.getElementById("pdfFile").files[0];
+    if(!file) throw new Error("PDF ফাইল নির্বাচন করুন");
+
+    const form = new FormData();
+    form.append("file",file);
+    form.append("title",document.getElementById("pdfTitle").value);
+    form.append("description",document.getElementById("pdfDescription").value);
+    form.append("price",document.getElementById("pdfPrice").value);
+
+    const response = await fetch(FUNCTION_URL,{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_KEY,
+        "Authorization":"Bearer "+currentSession.access_token
+      },
+      body:form
+    });
+    const result = await response.json();
+    if(!response.ok || result.error) throw new Error(result.error || "Upload failed");
+    message.textContent="PDF সফলভাবে Upload হয়েছে!";
+    loadDocuments();
+  } catch(e) { message.textContent=e.message; }
+}
+
+async function loginAdmin() {
+  const message=document.getElementById("loginMessage");
+  try {
+    const {data,error}=await supabase.auth.signInWithPassword({
+      email:document.getElementById("email").value,
+      password:document.getElementById("password").value
+    });
+    if(error) throw error;
+    currentSession=data.session;
+    showAdmin();
+  } catch(e) { message.textContent=e.message; }
+}
+
+async function logoutAdmin() {
+  await supabase.auth.signOut();
+  currentSession=null;
+  document.getElementById("admin").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+
+function showAdmin() {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("admin").classList.remove("hidden");
+  loadDocuments();
+  loadPayments();
+}
+
+async function loadDocuments() {
+  const area=document.getElementById("documents");
+  try {
+    const result=await api("admin_list_documents",{},true);
+    area.innerHTML="";
+    for(const doc of result.documents) {
+      const div=document.createElement("div");
+      div.className="item";
+      div.textContent=doc.title+" — ৳"+doc.price+" ";
+      const button=document.createElement("button");
+      button.textContent="Client Link তৈরি করুন";
+      button.onclick=()=>createLink(doc.id);
+      div.appendChild(button);
+      area.appendChild(div);
+    }
+  } catch(e) { area.textContent=e.message; }
+}
+
+async function createLink(documentId) {
+  try {
+    const result=await api("admin_create_client_link",{document_id:documentId},true);
+    const url=location.origin+location.pathname+"?token="+result.client_link.client_token;
+    prompt("এই Client Link কপি করে ক্লায়েন্টকে দিন:",url);
+  } catch(e) { alert(e.message); }
+}
+
+async function loadPayments() {
+  const area=document.getElementById("payments");
+  try {
+    const result=await api("admin_list_payments",{},true);
+    area.innerHTML="";
+    for(const p of result.payments) {
+      const div=document.createElement("div");
+      div.className="item";
+      const title=p.documents?.title || "PDF";
+      div.textContent=title+" | "+p.payer_phone+" | TrxID: "+p.transaction_id+" | "+p.status+" ";
+      if(p.status==="pending") {
+        for(const status of ["approved","rejected"]) {
+          const button=document.createElement("button");
+          button.textContent=status==="approved"?"Approve":"Reject";
+          button.onclick=()=>updatePayment(p.id,status);
+          div.appendChild(button);
+        }
+      }
+      area.appendChild(div);
+    }
+  } catch(e) { area.textContent=e.message; }
+}
+
+async function updatePayment(id,status) {
+  try {
+    await api("admin_update_payment",{payment_id:id,status},true);
+    loadPayments();
+  } catch(e) { alert(e.message); }
+}
+
+async function loadClient() {
+  try {
+    const result=await api("get_document",{client_token:currentToken});
+    document.getElementById("client").classList.remove("hidden");
+    document.getElementById("docTitle").textContent=result.document.title;
+    document.getElementById("docDescription").textContent=result.document.description||"";
+    document.getElementById("docPrice").textContent=result.document.price;
+    document.getElementById("preview").src=result.preview_url;
+
+    if(result.approved && result.download_url) {
+      document.getElementById("paymentBox").classList.add("hidden");
+      document.getElementById("downloadBox").classList.remove("hidden");
+      document.getElementById("downloadLink").href=result.download_url;
+    }
+  } catch(e) {
+    document.getElementById("home").classList.remove("hidden");
+    document.getElementById("home").textContent=e.message;
+  }
+}
+
+async function submitPayment() {
+  const message=document.getElementById("paymentMessage");
+  try {
+    await api("submit_payment",{
+      client_token:currentToken,
+      payer_phone:document.getElementById("payerPhone").value,
+      transaction_id:document.getElementById("trxId").value
+    });
+    message.textContent="পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
+  } catch(e) { message.textContent=e.message; }
+}
+
+(async function start(){
+  const {data}=await supabase.auth.getSession();
+  currentSession=data.session;
+  if(currentToken) {
+    loadClient();
+  } else if(currentSession) {
+    showAdmin();
+  } else {
+    document.getElementById("login").classList.remove("hidden");
+  }
+})();
+</script>
+</body>
+</html>
