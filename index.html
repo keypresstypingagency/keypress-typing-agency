@@ -36,6 +36,18 @@ a{color:#0759a5}
   background: white;
   box-shadow: 0 2px 8px #0005;
 }
+  /* Extra PDF Preview Protection */
+#pdfViewer,
+#pdfViewer canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+}
+
+#pdfViewer canvas {
+  pointer-events: auto;
+}
 </style>
 </head>
 <body>
