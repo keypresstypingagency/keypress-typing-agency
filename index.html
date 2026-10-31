@@ -99,7 +99,7 @@ a{color:#0759a5}
 const SUPABASE_URL = "https://jekxjpykhqpodzktndnz.supabase.co";
 const SUPABASE_KEY = "sb_publishable_CR3iD5C1yF_CCHiJs3gqOQ_81THSBgL";
 const FUNCTION_URL = SUPABASE_URL + "/functions/v1/clever-service";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentToken = new URLSearchParams(location.search).get("token");
 let currentSession = null;
@@ -150,7 +150,7 @@ async function uploadPDF() {
 async function loginAdmin() {
   const message=document.getElementById("loginMessage");
   try {
-    const {data,error}=await supabase.auth.signInWithPassword({
+    const {data,error}=await supabaseClient.auth.signInWithPassword({
       email:document.getElementById("email").value,
       password:document.getElementById("password").value
     });
@@ -263,7 +263,7 @@ async function submitPayment() {
 }
 
 (async function start(){
-  const {data}=await supabase.auth.getSession();
+  const {data}const {data}=await supabaseClient.auth.getSession();=await supabase.auth.getSession();
   currentSession=data.session;
 
   if(currentToken) {
