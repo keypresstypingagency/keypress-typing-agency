@@ -14,16 +14,34 @@ input,textarea,button{box-sizing:border-box;width:100%;padding:12px;margin:7px 0
 button{background:#145da0;color:white;border:0;cursor:pointer;font-weight:bold}
 button:disabled{opacity:.5}
 .hidden{display:none}
-iframe{width:100%;height:550px;border:1px solid #ddd}
 .small{color:#666;font-size:14px}
 .item{padding:12px;border-bottom:1px solid #ddd;overflow-wrap:anywhere}
 a{color:#0759a5}
+
+/* PDF Preview Viewer */
+#pdfViewer {
+  background: #555;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#pdfPages canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 12px auto;
+  background: white;
+  box-shadow: 0 2px 8px #0005;
+}
 </style>
 </head>
 <body>
 <header>
 <h1>Keypress Typing Agency</h1>
-<p>আপনার প্রয়োজনীয় PDF সেবা</p>
+<p>আপনার ফাইলটি চেক করুন। সব কিছু ঠিকঠাক থাকলে পেমেন্ট করুন</p>
 </header>
 
 <main>
@@ -32,8 +50,11 @@ a{color:#0759a5}
 <h2 id="docTitle">PDF Preview</h2>
 <p id="docDescription"></p>
 <p>মূল্য: ৳<strong id="docPrice"></strong></p>
-<iframe id="preview" title="PDF Preview"></iframe>
-<p class="small">অনুমতি ছাড়া PDF কপি বা শেয়ার করবেন না। স্ক্রিনশট বা স্ক্রিন রেকর্ডিং সম্পূর্ণভাবে আটকানো সম্ভব নয়।</p>
+<div id="pdfViewer">
+  <div id="pdfPages"></div>
+  <p id="pdfLoading">PDF লোড হচ্ছে...</p>
+</div>
+<p class="small">পেমেন্ট করলেই আপনি অরিজিনাল ফাইল পেয়ে যাবেন</p>
 </div>
 
 <div class="card" id="paymentBox">
