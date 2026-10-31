@@ -128,6 +128,27 @@ const supabaseClient = window.supabase.createClient(
 
 let currentToken = new URLSearchParams(location.search).get("token");
 let currentSession = null;
+  // PDF Preview Protection
+document.addEventListener("contextmenu", function(e) {
+  if (e.target.closest("#pdfViewer")) {
+    e.preventDefault();
+  }
+});
+
+document.addEventListener("keydown", function(e) {
+  if (
+    e.ctrlKey &&
+    ["s", "p", "c", "u"].includes(e.key.toLowerCase())
+  ) {
+    e.preventDefault();
+  }
+});
+
+document.addEventListener("dragstart", function(e) {
+  if (e.target.closest("#pdfViewer")) {
+    e.preventDefault();
+  }
+});
 // PDF.js Worker সেটআপ
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
