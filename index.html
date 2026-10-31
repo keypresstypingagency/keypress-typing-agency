@@ -128,7 +128,53 @@ const supabaseClient = window.supabase.createClient(
 
 let currentToken = new URLSearchParams(location.search).get("token");
 let currentSession = null;
+// PDF.js Worker সেটআপ
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
+// PDF পেজগুলো Canvas-এ দেখানো
+async function renderPdf(pdfUrl) {
+  const pages = document.getElementById("pdfPages");
+  const loading = document.getElementById("pdfLoading");
+
+  pages.innerHTML = "";
+  loading.textContent = "PDF লোড হচ্ছে...";
+
+  try {
+    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+
+    loading.textContent = "";
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+
+      const originalViewport = page.getViewport({ scale: 1 });
+      const availableWidth = Math.min(
+        document.getElementById("pdfViewer").clientWidth - 30,
+        800
+      );
+
+      const scale = availableWidth / originalViewport.width;
+      const viewport = page.getViewport({ scale });
+
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      pages.appendChild(canvas);
+
+      await page.render({
+        canvasContext: context,
+        viewport: viewport
+      }).promise;
+    }
+  } catch (error) {
+    loading.textContent = "PDF দেখানো যাচ্ছে না: " + error.message;
+    throw error;
+  }
+}
 async function api(action, data={}, admin=false) {
   const headers = {
     "apikey": SUPABASE_KEY,
@@ -329,7 +375,7 @@ async function loadClient() {
     document.getElementById("docDescription").textContent=
       result.document.description||"";
     document.getElementById("docPrice").textContent=result.document.price;
-    document.getElementById("preview").src=result.preview_url;
+    await renderPdf(result.preview_url);
 
     if(result.approved && result.download_url) {
       document.getElementById("paymentBox").classList.add("hidden");
