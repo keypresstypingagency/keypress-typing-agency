@@ -17,7 +17,21 @@ button:disabled{opacity:.5}
 .small{color:#666;font-size:14px}
 .item{padding:12px;border-bottom:1px solid #ddd;overflow-wrap:anywhere}
 a{color:#0759a5}
+.whatsapp-button {
+  display: block;
+  background: #25D366;
+  color: white;
+  text-align: center;
+  padding: 13px;
+  margin: 12px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
 
+.whatsapp-button:hover {
+  background: #1da851;
+}
 /* PDF Preview Viewer */
 #pdfViewer {
   background: #555;
@@ -71,14 +85,22 @@ a{color:#0759a5}
 
 <div class="card" id="paymentBox">
 <h3>পেমেন্ট করুন</h3>
+  <a
+  class="whatsapp-button"
+  href="https://wa.me/8801610362748?text=আমি%20আপনার%20টাইপিং%20সার্ভিস%20সম্পর্কে%20জানতে%20চাই"
+  target="_blank"
+  rel="noopener"
+>
+  WhatsApp-এ যোগাযোগ করুন
+</a>
   <div class="small">
   <p><strong>পেমেন্ট করার নিয়ম:</strong></p>
   <ol>
-    <li>উপরে দেওয়া বিকাশ অথবা রকেট নম্বরে Send Money করুন।</li>
+    <li>নিচে দেওয়া বিকাশ অথবা রকেট নম্বরে Send Money করুন।</li>
     <li>PDF-এর নির্ধারিত মূল্য অনুযায়ী টাকা পাঠান।</li>
     <li>যে নম্বর থেকে টাকা পাঠিয়েছেন, সেটি লিখুন।</li>
     <li>Transaction ID দিয়ে পেমেন্ট তথ্য জমা দিন।</li>
-    <li>Admin যাচাই করে অনুমোদন দিলে PDF Download করতে পারবেন।</li>
+    <li>Admin যাচাই করে অনুমোদন দিলে পছন্দ অনুযায়ী ফরমেটে ফাইলটি Download করতে পারবেন।</li>
   </ol>
 </div>
 <p>বিকাশ / রকেট নম্বর: <strong>01890557293</strong></p>
