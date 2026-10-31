@@ -124,7 +124,7 @@ a{color:#0759a5}
 </div>
 </section>
 
-<section id="login" class="card">
+<section id="login" class="card hidden">
 <h2>Admin Login</h2>
 <input id="email" type="email" placeholder="Admin Email">
 <input id="password" type="password" placeholder="Password">
@@ -484,26 +484,28 @@ async function submitPayment() {
 
 (async function start() {
   try {
-    const {data,error}=await supabaseClient.auth.getSession();
+    const { data, error } = await supabaseClient.auth.getSession();
 
-    if(error) throw error;
+    if (error) throw error;
 
-    currentSession=data.session;
+    currentSession = data.session;
 
-    if(currentToken) {
+    if (currentToken) {
       loadClient();
-    } else {
-      document.getElementById("home").classList.add("hidden");
 
-      if(currentSession) {
+    } else if (new URLSearchParams(location.search).get("admin") === "1") {
+      if (currentSession) {
         showAdmin();
       } else {
         document.getElementById("login").classList.remove("hidden");
       }
+
+    } else {
+      document.getElementById("home").classList.remove("hidden");
     }
 
-  } catch(e) {
-    document.getElementById("loginMessage").textContent=e.message;
+  } catch (e) {
+    document.getElementById("loginMessage").textContent = e.message;
   }
 })();
 </script>
