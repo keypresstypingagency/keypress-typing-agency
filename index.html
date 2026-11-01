@@ -210,13 +210,13 @@ button.processing {
 
 <div class="card">
 <h3>আপনার PDF তালিকা</h3>
-<button onclick="loadDocuments()">তালিকা Refresh করুন</button>
+<button onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
 <div id="documents"></div>
 </div>
 
 <div class="card">
 <h3>পেমেন্ট যাচাই</h3>
-<button onclick="loadPayments()">পেমেন্ট Refresh করুন</button>
+<button onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
 <div id="payments"></div>
 </div>
 </section>
@@ -343,6 +343,31 @@ document.addEventListener("click", function(e) {
     throw error;
   }
 }, true);
+  async function refreshDocuments(button) {
+  const oldHTML = button.innerHTML;
+  button.disabled = true;
+  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+
+  try {
+    await loadDocuments();
+  } finally {
+    button.disabled = false;
+    button.innerHTML = oldHTML;
+  }
+}
+
+async function refreshPayments(button) {
+  const oldHTML = button.innerHTML;
+  button.disabled = true;
+  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+
+  try {
+    await loadPayments();
+  } finally {
+    button.disabled = false;
+    button.innerHTML = oldHTML;
+  }
+}
 async function api(action, data={}, admin=false) {
   const headers = {
     "apikey": SUPABASE_KEY,
@@ -608,6 +633,13 @@ async function submitPayment() {
   const oldText = button.textContent;
 
   try {
+    const phone = document.getElementById("payerPhone").value.trim();
+const trx = document.getElementById("trxId").value.trim();
+
+if (!phone || !trx) {
+  message.textContent = "পেমেন্টের ফোন নম্বর ও Transaction ID দিন।";
+  return;
+}
     button.disabled = true;
     button.classList.add("processing");
     button.innerHTML = '<span class="spinner"></span> জমা হচ্ছে...';
