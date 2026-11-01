@@ -11,9 +11,7 @@ self.addEventListener("push", function (event) {
       {
         body: data.body || "আপনার জন্য নতুন নোটিফিকেশন এসেছে।",
         icon: "/favicon.ico",
-        data: {
-          url: data.url || "/"
-        }
+        data: { url: data.url || "/" }
       }
     )
   );
