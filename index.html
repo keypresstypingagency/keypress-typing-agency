@@ -210,13 +210,13 @@ button.processing {
 
 <div class="card">
 <h3>আপনার PDF তালিকা</h3>
-<button onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
+<button data-custom-loading onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
 <div id="documents"></div>
 </div>
 
 <div class="card">
 <h3>পেমেন্ট যাচাই</h3>
-<button onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
+<button data-custom-loading onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
 <div id="payments"></div>
 </div>
 </section>
@@ -314,7 +314,12 @@ async function renderPdf(pdfUrl) {
 document.addEventListener("click", function(e) {
   const button = e.target.closest("button");
 
-  if (!button || button.disabled || !button.onclick) return;
+ if (
+  !button ||
+  button.disabled ||
+  !button.onclick ||
+  button.hasAttribute("data-custom-loading")
+) return;
 
   const originalHandler = button.onclick;
   const oldHTML = button.innerHTML;
