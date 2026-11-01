@@ -27,7 +27,11 @@ a{color:#0759a5}
   text-decoration: none;
   font-weight: bold;
 }
-.whatsapp-button:hover { background: #1da851; }
+
+.whatsapp-button:hover {
+  background: #1da851;
+}
+/* PDF Preview Viewer */
 #pdfViewer {
   background: #555;
   padding: 12px;
@@ -36,6 +40,7 @@ a{color:#0759a5}
   user-select: none;
   -webkit-user-select: none;
 }
+
 #pdfPages canvas {
   display: block;
   max-width: 100%;
@@ -44,24 +49,53 @@ a{color:#0759a5}
   background: white;
   box-shadow: 0 2px 8px #0005;
 }
-#pdfViewer,#pdfViewer canvas {
+  /* Extra PDF Preview Protection */
+#pdfViewer,
+#pdfViewer canvas {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
 }
-#pdfViewer canvas { pointer-events: auto; }
-.status-pending { color: #d97706; font-weight: bold; }
-.status-approved { color: #16a34a; font-weight: bold; }
-.status-rejected { color: #dc2626; font-weight: bold; }
-.approve-btn,.reject-btn {
+
+#pdfViewer canvas {
+  pointer-events: auto;
+}
+ /* পেমেন্ট স্ট্যাটাসের রং */
+.status-pending {
+  color: #d97706;
+  font-weight: bold;
+}
+
+.status-approved {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+/* Approve ও Reject বাটনের সাইজ */
+.approve-btn,
+.reject-btn {
   width: auto;
   display: inline-block;
   padding: 10px 24px;
   margin: 7px 6px 7px 0;
 }
-.approve-btn { background: #16a34a; color: white; }
-.reject-btn { background: #dc2626; color: white; }
+
+.approve-btn {
+  background: #16a34a;
+  color: white;
+}
+
+.reject-btn {
+  background: #dc2626;
+  color: white;
+}
+  /* Loading Spinner */
 .spinner {
   display: inline-block;
   width: 16px;
@@ -73,7 +107,14 @@ a{color:#0759a5}
   vertical-align: middle;
   margin-right: 7px;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Processing Button */
 button.processing {
   opacity: 0.75;
   cursor: wait;
@@ -103,85 +144,91 @@ button.processing {
 </div>
 
 <div class="card" id="paymentBox">
+
   <p>
     টাইপিং সার্ভিস সম্পর্কে বিস্তারিত জানতে অথবা যেকোনো প্রয়োজনে
     আমাদের WhatsApp-এ যোগাযোগ করুন।
   </p>
-  <a class="whatsapp-button"
+
+  <a
+    class="whatsapp-button"
     href="https://wa.me/8801610362748?text=আমি%20আপনার%20টাইপিং%20সার্ভিস%20সম্পর্কে%20জানতে%20চাই"
-    target="_blank" rel="noopener">
+    target="_blank"
+    rel="noopener"
+  >
     WhatsApp-এ যোগাযোগ করুন
   </a>
+
   <h3>পেমেন্ট করুন</h3>
+
   <div class="small">
     <p><strong>পেমেন্ট করার নিয়ম:</strong></p>
     <ol>
-      <li>নিচে দেওয়া নাম্বারে বিকাশ অথবা রকেটে Send Money করুন।</li>
-      <li>ডকুমেন্ট-এর নির্ধারিত মূল্য অনুযায়ী টাকা পাঠান।</li>
-      <li>যে নম্বর থেকে টাকা পাঠিয়েছেন, সেটি লিখুন।</li>
-      <li>Transaction ID দিয়ে পেমেন্ট তথ্য জমা দিন।</li>
-      <li>Admin যাচাই করে অনুমোদন দিলে পছন্দ অনুযায়ী ফরমেটে ফাইলটি Download করতে পারবেন।</li>
-    </ol>
-  </div>
-  <p>বিকাশ / রকেট নম্বর: <strong>01890557293</strong></p>
-  <input id="payerPhone" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
-  <input id="trxId" placeholder="Transaction ID">
-  <button onclick="submitPayment()">পেমেন্ট তথ্য জমা দিন</button>
-  <p id="paymentMessage"></p>
+    <li>নিচে দেওয়া নাম্বারে বিকাশ অথবা রকেটে Send Money করুন।</li>
+    <li>ডকুমেন্ট-এর নির্ধারিত মূল্য অনুযায়ী টাকা পাঠান।</li>
+    <li>যে নম্বর থেকে টাকা পাঠিয়েছেন, সেটি লিখুন।</li>
+    <li>Transaction ID দিয়ে পেমেন্ট তথ্য জমা দিন।</li>
+    <li>Admin যাচাই করে অনুমোদন দিলে পছন্দ অনুযায়ী ফরমেটে ফাইলটি Download করতে পারবেন।</li>
+  </ol>
+</div>
+<p>বিকাশ / রকেট নম্বর: <strong>01890557293</strong></p>
+<input id="payerPhone" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
+<input id="trxId" placeholder="Transaction ID">
+<button onclick="submitPayment()">পেমেন্ট তথ্য জমা দিন</button>
+<p id="paymentMessage"></p>
 </div>
 
 <div class="card hidden" id="downloadBox">
-  <h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
-  <a id="downloadLink" href="#" target="_blank" rel="noopener"
-     onclick="showDownloadLoading(this)">PDF Download করুন</a>
+<h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
+<a id="downloadLink" href="#" target="_blank" rel="noopener"
+   onclick="showDownloadLoading(this)">PDF Download করুন</a>
 </div>
 </section>
 
 <section id="login" class="card hidden">
-  <h2>Admin Login</h2>
-  <input id="email" type="email" placeholder="Admin Email">
-  <input id="password" type="password" placeholder="Password">
-  <button id="loginBtn" data-custom-loading onclick="loginAdmin()">Login</button>
-  <p id="loginMessage"></p>
+<h2>Admin Login</h2>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button id="loginBtn" data-custom-loading onclick="loginAdmin()">Login</button>
+<p id="loginMessage"></p>
 </section>
 
 <section id="admin" class="hidden">
 <div class="card">
-  <h2>Admin Dashboard</h2>
-  <button type="button" id="adminPushBtn" onclick="enablePushNotifications('admin')">Admin নোটিফিকেশন চালু করুন</button>
-  <p id="adminPushMessage" class="small"></p>
-  <button id="logoutBtn" data-custom-loading onclick="logoutAdmin()">Logout</button>
+<h2>Admin Dashboard</h2>
+<button type="button" id="adminPushBtn" onclick="enablePushNotifications('admin')">Admin নোটিফিকেশন চালু করুন</button>
+<p id="adminPushMessage" class="small"></p>
+<button id="logoutBtn" data-custom-loading onclick="logoutAdmin()">Logout</button>
 </div>
 
 <div class="card">
-  <h3>নতুন PDF Upload</h3>
-  <input id="pdfTitle" placeholder="PDF-এর নাম">
-  <textarea id="pdfDescription" placeholder="PDF সম্পর্কে বিবরণ"></textarea>
-  <input id="pdfPrice" type="number" min="0" placeholder="মূল্য (টাকা)">
-  <input id="pdfFile" type="file" accept="application/pdf">
-  <button onclick="uploadPDF()">PDF Upload করুন</button>
-  <p id="uploadMessage"></p>
+<h3>নতুন PDF Upload</h3>
+<input id="pdfTitle" placeholder="PDF-এর নাম">
+<textarea id="pdfDescription" placeholder="PDF সম্পর্কে বিবরণ"></textarea>
+<input id="pdfPrice" type="number" min="0" placeholder="মূল্য (টাকা)">
+<input id="pdfFile" type="file" accept="application/pdf">
+<button onclick="uploadPDF()">PDF Upload করুন</button>
+<p id="uploadMessage"></p>
 </div>
 
 <div class="card">
-  <h3>আপনার PDF তালিকা</h3>
-  <button data-custom-loading onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
-  <div id="documents"></div>
+<h3>আপনার PDF তালিকা</h3>
+<button data-custom-loading onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
+<div id="documents"></div>
 </div>
 
 <div class="card">
-  <h3>পেমেন্ট যাচাই</h3>
-  <button data-custom-loading onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
-  <div id="payments"></div>
+<h3>পেমেন্ট যাচাই</h3>
+<button data-custom-loading onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
+<div id="payments"></div>
 </div>
 </section>
 
 <section id="home" class="card hidden">
-  <h2>Keypress Typing Agency</h2>
-  <p>আপনার PDF দেখতে হলে আমাদের দেওয়া Client Link ব্যবহার করুন।</p>
+<h2>Keypress Typing Agency</h2>
+<p>আপনার PDF দেখতে হলে আমাদের দেওয়া Client Link ব্যবহার করুন।</p>
 </section>
 </main>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -197,22 +244,27 @@ const supabaseClient = window.supabase.createClient(
 
 let currentToken = new URLSearchParams(location.search).get("token");
 let currentSession = null;
-
-// PDF Preview Protection
+  // PDF Preview Protection
 document.addEventListener("contextmenu", function(e) {
-  if (e.target.closest("#pdfViewer")) e.preventDefault();
+  if (e.target.closest("#pdfViewer")) {
+    e.preventDefault();
+  }
 });
 
 document.addEventListener("keydown", function(e) {
-  if (e.ctrlKey && ["s", "p", "c", "u"].includes(e.key.toLowerCase())) {
+  if (
+    e.ctrlKey &&
+    ["s", "p", "c", "u"].includes(e.key.toLowerCase())
+  ) {
     e.preventDefault();
   }
 });
 
 document.addEventListener("dragstart", function(e) {
-  if (e.target.closest("#pdfViewer")) e.preventDefault();
+  if (e.target.closest("#pdfViewer")) {
+    e.preventDefault();
+  }
 });
-
 // PDF.js Worker সেটআপ
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -221,6 +273,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 async function renderPdf(pdfUrl) {
   const pages = document.getElementById("pdfPages");
   const loading = document.getElementById("pdfLoading");
+
   pages.innerHTML = "";
   loading.textContent = "PDF লোড হচ্ছে...";
 
@@ -232,17 +285,22 @@ async function renderPdf(pdfUrl) {
       const page = await pdf.getPage(i);
       const viewer = document.getElementById("pdfViewer");
       const availableWidth = viewer.clientWidth - 30;
+
       const originalViewport = page.getViewport({ scale: 1 });
       const scale = availableWidth / originalViewport.width;
       const viewport = page.getViewport({ scale });
+
       const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
+
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
       canvas.width = Math.floor(viewport.width * pixelRatio);
       canvas.height = Math.floor(viewport.height * pixelRatio);
+
       canvas.style.width = "100%";
       canvas.style.height = "auto";
+
       pages.appendChild(canvas);
 
       await page.render({
@@ -256,30 +314,36 @@ async function renderPdf(pdfUrl) {
     throw error;
   }
 }
-
-// সব বাটনের জন্য সাধারণ Loading Animation
+  // সব বাটনের জন্য সাধারণ Loading Animation
 document.addEventListener("click", function(e) {
   const button = e.target.closest("button");
-  if (button && button.hasAttribute("data-custom-loading")) return;
-
-  if (!button || button.disabled || !button.onclick ||
-      button.hasAttribute("data-custom-loading")) return;
+if (button && button.hasAttribute("data-custom-loading")) return;
+ if (
+  !button ||
+  button.disabled ||
+  !button.onclick ||
+  button.hasAttribute("data-custom-loading")
+) return;
 
   const originalHandler = button.onclick;
   const oldHTML = button.innerHTML;
+
   button.onclick = null;
   button.disabled = true;
   button.classList.add("processing");
-  button.innerHTML = '<span class="spinner"></span> অপেক্ষা করুন...';
+  button.innerHTML =
+    '<span class="spinner"></span> অপেক্ষা করুন...';
 
   try {
     const result = originalHandler.call(button, e);
+
     Promise.resolve(result).finally(() => {
       button.disabled = false;
       button.classList.remove("processing");
       button.innerHTML = oldHTML;
       button.onclick = originalHandler;
     });
+
   } catch (error) {
     button.disabled = false;
     button.classList.remove("processing");
@@ -288,11 +352,11 @@ document.addEventListener("click", function(e) {
     throw error;
   }
 }, true);
-
-async function refreshDocuments(button) {
+  async function refreshDocuments(button) {
   const oldHTML = button.innerHTML;
   button.disabled = true;
   button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+
   try {
     await loadDocuments();
   } finally {
@@ -305,6 +369,7 @@ async function refreshPayments(button) {
   const oldHTML = button.innerHTML;
   button.disabled = true;
   button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+
   try {
     await loadPayments();
   } finally {
@@ -312,32 +377,33 @@ async function refreshPayments(button) {
     button.innerHTML = oldHTML;
   }
 }
-
 async function api(action, data={}, admin=false) {
   const headers = {
     "apikey": SUPABASE_KEY,
     "Content-Type": "application/json"
   };
 
-  if (admin) {
-    if (!currentSession) throw new Error("Admin login করুন");
+  if(admin) {
+    if(!currentSession) throw new Error("Admin login করুন");
     headers.Authorization = "Bearer " + currentSession.access_token;
   }
 
-  const response = await fetch(FUNCTION_URL, {
-    method: "POST",
+  const response = await fetch(FUNCTION_URL,{
+    method:"POST",
     headers,
-    body: JSON.stringify({action,...data})
+    body:JSON.stringify({action,...data})
   });
 
   const result = await response.json();
-  if (!response.ok || result.error) {
+
+  if(!response.ok || result.error) {
     throw new Error(result.error || "Request failed");
   }
+
   return result;
 }
 
-// Browser Push Notifications
+// Browser Push Notifications: add-on only; existing functions remain unchanged.
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -346,45 +412,24 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 async function enablePushNotifications(role) {
-  const message = document.getElementById(
-    role === "admin" ? "adminPushMessage" : "clientPushMessage"
-  );
-  const button = document.getElementById(
-    role === "admin" ? "adminPushBtn" : "clientPushBtn"
-  );
-  const oldText = button?.textContent || "নোটিফিকেশন চালু করুন";
+  const message = document.getElementById(role === "admin" ? "adminPushMessage" : "clientPushMessage");
+  const button = document.getElementById(role === "admin" ? "adminPushBtn" : "clientPushBtn");
+  const originalText = button ? button.textContent : "নোটিফিকেশন চালু করুন";
 
   try {
-    if (!("Notification" in window) ||
-        !("serviceWorker" in navigator) ||
-        !("PushManager" in window)) {
-      throw new Error("এই Browser-এ Push Notification সমর্থিত নয়। Chrome/Edge ব্যবহার করুন।");
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      throw new Error("এই Browser-এ Push Notification সমর্থিত নয়। Chrome বা Edge ব্যবহার করুন।");
     }
+    if (role === "client" && !currentToken) throw new Error("Client Link পাওয়া যায়নি।");
+    if (role === "admin" && !currentSession) throw new Error("প্রথমে Admin Login করুন।");
+    if (Notification.permission === "denied") throw new Error("Browser Settings থেকে এই সাইটের Notification Allow করুন।");
 
-    if (role === "client" && !currentToken) {
-      throw new Error("Client Link পাওয়া যায়নি।");
-    }
-    if (role === "admin" && !currentSession) {
-      throw new Error("প্রথমে Admin Login করুন।");
-    }
-    if (Notification.permission === "denied") {
-      throw new Error("Browser Settings থেকে এই সাইটের Notification Allow করুন।");
-    }
-
-    button.disabled = true;
-    button.textContent = "চালু হচ্ছে...";
-
-    const permission = Notification.permission === "granted"
-      ? "granted"
-      : await Notification.requestPermission();
-
-    if (permission !== "granted") {
-      throw new Error("আপনি Notification অনুমতি দেননি।");
-    }
+    if (button) { button.disabled = true; button.textContent = "চালু হচ্ছে..."; }
+    const permission = Notification.permission === "granted" ? "granted" : await Notification.requestPermission();
+    if (permission !== "granted") throw new Error("আপনি Notification অনুমতি দেননি।");
 
     const registration = await navigator.serviceWorker.register("/service-worker.js");
     let subscription = await registration.pushManager.getSubscription();
-
     if (!subscription) {
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -393,26 +438,15 @@ async function enablePushNotifications(role) {
     }
 
     const result = await api(
-      role === "admin"
-        ? "save_admin_push_subscription"
-        : "save_client_push_subscription",
-      {
-        client_token: currentToken,
-        subscription: subscription.toJSON()
-      },
+      role === "admin" ? "save_admin_push_subscription" : "save_client_push_subscription",
+      { client_token: currentToken, subscription: subscription.toJSON() },
       role === "admin"
     );
-
-    message.textContent = result.message || "নোটিফিকেশন সফলভাবে চালু হয়েছে।";
+    if (message) message.textContent = result.message || "নোটিফিকেশন চালু হয়েছে।";
   } catch (error) {
-    if (message) {
-      message.textContent = error.message || "নোটিফিকেশন চালু করা যায়নি।";
-    }
+    if (message) message.textContent = error.message || "নোটিফিকেশন চালু করা যায়নি।";
   } finally {
-    if (button) {
-      button.disabled = false;
-      button.textContent = oldText;
-    }
+    if (button) { button.disabled = false; button.textContent = originalText; }
   }
 }
 
@@ -448,21 +482,23 @@ async function uploadPDF() {
     });
 
     const result = await response.json();
+
     if (!response.ok || result.error) {
       throw new Error(result.error || "Upload failed");
     }
 
     message.textContent = "PDF সফলভাবে Upload হয়েছে!";
     loadDocuments();
+
   } catch (e) {
     message.textContent = e.message;
+
   } finally {
     button.disabled = false;
     button.classList.remove("processing");
     button.textContent = oldText;
   }
 }
-
 async function loginAdmin() {
   const message = document.getElementById("loginMessage");
   const button = document.getElementById("loginBtn");
@@ -479,10 +515,13 @@ async function loginAdmin() {
     });
 
     if (error) throw error;
+
     currentSession = data.session;
     showAdmin();
+
   } catch (e) {
     message.textContent = e.message;
+
   } finally {
     button.disabled = false;
     button.innerHTML = oldHTML;
@@ -496,12 +535,15 @@ async function logoutAdmin() {
   try {
     button.disabled = true;
     button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
+
     const { error } = await supabaseClient.auth.signOut();
     if (error) throw error;
 
     currentSession = null;
+
     document.getElementById("admin").classList.add("hidden");
     document.getElementById("login").classList.remove("hidden");
+
   } catch (e) {
     alert(e.message);
     button.disabled = false;
@@ -512,47 +554,50 @@ async function logoutAdmin() {
 function showAdmin() {
   document.getElementById("login").classList.add("hidden");
   document.getElementById("admin").classList.remove("hidden");
+
   loadDocuments();
   loadPayments();
 }
 
 async function loadDocuments() {
-  const area = document.getElementById("documents");
+  const area=document.getElementById("documents");
 
   try {
-    const result = await api("admin_list_documents", {}, true);
-    area.innerHTML = "";
+    const result=await api("admin_list_documents",{},true);
+    area.innerHTML="";
 
-    for (const doc of result.documents) {
-      const div = document.createElement("div");
-      div.className = "item";
-      div.textContent = doc.title + " — ৳" + doc.price + " ";
+    for(const doc of result.documents) {
+      const div=document.createElement("div");
+      div.className="item";
+      div.textContent=doc.title+" — ৳"+doc.price+" ";
 
-      const button = document.createElement("button");
-      button.textContent = "Client Link তৈরি করুন";
-      button.onclick = () => createLink(doc.id);
+      const button=document.createElement("button");
+      button.textContent="Client Link তৈরি করুন";
+      button.onclick=()=>createLink(doc.id);
 
       div.appendChild(button);
       area.appendChild(div);
     }
-  } catch (e) {
-    area.textContent = e.message;
+
+  } catch(e) {
+    area.textContent=e.message;
   }
 }
 
 async function createLink(documentId) {
   try {
-    const result = await api(
+    const result=await api(
       "admin_create_client_link",
-      {document_id: documentId},
+      {document_id:documentId},
       true
     );
 
-    const url = location.origin + location.pathname +
-      "?token=" + result.client_link.client_token;
+    const url=location.origin+location.pathname+
+      "?token="+result.client_link.client_token;
 
-    prompt("এই Client Link কপি করে ক্লায়েন্টকে দিন:", url);
-  } catch (e) {
+    prompt("এই Client Link কপি করে ক্লায়েন্টকে দিন:",url);
+
+  } catch(e) {
     alert(e.message);
   }
 }
@@ -567,6 +612,7 @@ async function loadPayments() {
     for (const p of result.payments) {
       const div = document.createElement("div");
       div.className = "item";
+
       const title = p.documents?.title || "PDF";
 
       div.appendChild(document.createTextNode(
@@ -582,61 +628,71 @@ async function loadPayments() {
       if (p.status === "pending") {
         for (const value of ["approved", "rejected"]) {
           const button = document.createElement("button");
-          button.textContent = value === "approved" ? "Approve" : "Reject";
-          button.className = value === "approved" ? "approve-btn" : "reject-btn";
+
+          button.textContent =
+            value === "approved" ? "Approve" : "Reject";
+
+          button.className =
+            value === "approved" ? "approve-btn" : "reject-btn";
+
           button.onclick = () => updatePayment(p.id, value);
+
           div.appendChild(button);
         }
       }
+
       area.appendChild(div);
     }
+
   } catch (e) {
     area.textContent = e.message;
   }
 }
 
-async function updatePayment(id, status) {
+async function updatePayment(id,status) {
   try {
-    await api("admin_update_payment", {
-      payment_id: id,
+    await api("admin_update_payment",{
+      payment_id:id,
       status
-    }, true);
+    },true);
+
     loadPayments();
-  } catch (e) {
+
+  } catch(e) {
     alert(e.message);
   }
 }
-
 function showDownloadLoading(link) {
   const oldText = link.textContent;
+
   link.innerHTML = '<span class="spinner"></span> Download শুরু হচ্ছে...';
+
   setTimeout(() => {
     link.textContent = oldText;
   }, 3000);
 }
-
 async function loadClient() {
   try {
-    const result = await api("get_document", {
-      client_token: currentToken
+    const result=await api("get_document",{
+      client_token:currentToken
     });
 
     document.getElementById("client").classList.remove("hidden");
-    document.getElementById("docTitle").textContent = result.document.title;
-    document.getElementById("docDescription").textContent =
-      result.document.description || "";
-    document.getElementById("docPrice").textContent = result.document.price;
-
+    document.getElementById("docTitle").textContent=result.document.title;
+    document.getElementById("docDescription").textContent=
+      result.document.description||"";
+    document.getElementById("docPrice").textContent=result.document.price;
     await renderPdf(result.preview_url);
 
-    if (result.approved && result.download_url) {
+    if(result.approved && result.download_url) {
       document.getElementById("paymentBox").classList.add("hidden");
       document.getElementById("downloadBox").classList.remove("hidden");
-      document.getElementById("downloadLink").href = result.download_url;
+      document.getElementById("downloadLink").href=result.download_url;
     }
-  } catch (e) {
+
+  } catch(e) {
     document.getElementById("home").classList.remove("hidden");
-    document.getElementById("home").textContent = e.message;
+    document.getElementById("home").textContent=e.message;
   }
 }
 
@@ -647,13 +703,12 @@ async function submitPayment() {
 
   try {
     const phone = document.getElementById("payerPhone").value.trim();
-    const trx = document.getElementById("trxId").value.trim();
+const trx = document.getElementById("trxId").value.trim();
 
-    if (!phone || !trx) {
-      message.textContent = "পেমেন্টের ফোন নম্বর ও Transaction ID দিন।";
-      return;
-    }
-
+if (!phone || !trx) {
+  message.textContent = "পেমেন্টের ফোন নম্বর ও Transaction ID দিন।";
+  return;
+}
     button.disabled = true;
     button.classList.add("processing");
     button.innerHTML = '<span class="spinner"></span> জমা হচ্ছে...';
@@ -667,8 +722,10 @@ async function submitPayment() {
 
     message.textContent =
       "পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
+
   } catch (e) {
     message.textContent = e.message;
+
   } finally {
     button.disabled = false;
     button.classList.remove("processing");
@@ -679,20 +736,25 @@ async function submitPayment() {
 (async function start() {
   try {
     const { data, error } = await supabaseClient.auth.getSession();
+
     if (error) throw error;
+
     currentSession = data.session;
 
     if (currentToken) {
       loadClient();
+
     } else if (new URLSearchParams(location.search).get("admin") === "1") {
       if (currentSession) {
         showAdmin();
       } else {
         document.getElementById("login").classList.remove("hidden");
       }
+
     } else {
       document.getElementById("home").classList.remove("hidden");
     }
+
   } catch (e) {
     document.getElementById("loginMessage").textContent = e.message;
   }
