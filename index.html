@@ -204,7 +204,7 @@ button.processing {
 <textarea id="pdfDescription" placeholder="PDF সম্পর্কে বিবরণ"></textarea>
 <input id="pdfPrice" type="number" min="0" placeholder="মূল্য (টাকা)">
 <input id="pdfFile" type="file" accept="application/pdf">
-<button onclick="uploadPDF()">PDF Upload করুন</button>
+<button id="uploadBtn" onclick="uploadPDF()">PDF Upload করুন</button>
 <p id="uploadMessage"></p>
 </div>
 
@@ -399,10 +399,11 @@ async function api(action, data={}, admin=false) {
   return result;
 }
 
+
 async function uploadPDF() {
   const message = document.getElementById("uploadMessage");
-  const button = document.activeElement;
-  const oldText = button.textContent;
+  const button = document.getElementById("uploadBtn");
+  const oldHTML = button.innerHTML;
 
   try {
     if (!currentSession) throw new Error("প্রথমে Admin Login করুন");
@@ -412,7 +413,9 @@ async function uploadPDF() {
 
     button.disabled = true;
     button.classList.add("processing");
-    button.innerHTML = '<span class="spinner"></span> Upload হচ্ছে...';
+    button.innerHTML =
+      '<span class="spinner"></span> Upload হচ্ছে...';
+
     message.textContent = "";
 
     const form = new FormData();
@@ -437,17 +440,24 @@ async function uploadPDF() {
     }
 
     message.textContent = "PDF সফলভাবে Upload হয়েছে!";
-    loadDocuments();
+
+    document.getElementById("pdfTitle").value = "";
+    document.getElementById("pdfDescription").value = "";
+    document.getElementById("pdfPrice").value = "";
+    document.getElementById("pdfFile").value = "";
+
+    await loadDocuments();
 
   } catch (e) {
-    message.textContent = e.message;
+    message.textContent = "সমস্যা: " + e.message;
 
   } finally {
     button.disabled = false;
     button.classList.remove("processing");
-    button.textContent = oldText;
+    button.innerHTML = oldHTML;
   }
 }
+
 async function loginAdmin() {
   const message = document.getElementById("loginMessage");
   const button = document.getElementById("loginBtn");
