@@ -188,14 +188,14 @@ button.processing {
 <h2>Admin Login</h2>
 <input id="email" type="email" placeholder="Admin Email">
 <input id="password" type="password" placeholder="Password">
-<button data-custom-loading onclick="loginAdmin()">Login</button>
+<button id="loginBtn" data-custom-loading onclick="loginAdmin()">Login</button>
 <p id="loginMessage"></p>
 </section>
 
 <section id="admin" class="hidden">
 <div class="card">
 <h2>Admin Dashboard</h2>
-<button data-custom-loading onclick="logoutAdmin()">Logout</button>
+<button id="logoutBtn" data-custom-loading onclick="logoutAdmin()">Logout</button>
 </div>
 
 <div class="card">
@@ -450,12 +450,11 @@ async function uploadPDF() {
 }
 async function loginAdmin() {
   const message = document.getElementById("loginMessage");
-  const button = document.querySelector("#login button");
-  const oldText = button.textContent;
+  const button = document.getElementById("loginBtn");
+  const oldHTML = button.innerHTML;
 
   try {
     button.disabled = true;
-    button.classList.add("processing");
     button.innerHTML = '<span class="spinner"></span> অপেক্ষা করুন...';
     message.textContent = "";
 
@@ -474,20 +473,17 @@ async function loginAdmin() {
 
   } finally {
     button.disabled = false;
-    button.classList.remove("processing");
-    button.textContent = oldText;
+    button.innerHTML = oldHTML;
   }
 }
 
 async function logoutAdmin() {
-  const button = document.querySelector("#admin button[onclick='logoutAdmin()']");
-  const oldHTML = button ? button.innerHTML : "Logout";
+  const button = document.getElementById("logoutBtn");
+  const oldHTML = button.innerHTML;
 
   try {
-    if (button) {
-      button.disabled = true;
-      button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
-    }
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
 
     const { error } = await supabaseClient.auth.signOut();
     if (error) throw error;
@@ -499,11 +495,8 @@ async function logoutAdmin() {
 
   } catch (e) {
     alert(e.message);
-
-    if (button) {
-      button.disabled = false;
-      button.innerHTML = oldHTML;
-    }
+    button.disabled = false;
+    button.innerHTML = oldHTML;
   }
 }
 
