@@ -476,6 +476,7 @@ async function loginAdmin() {
     button.innerHTML = oldHTML;
   }
 }
+// ===== LOGOUT FUNCTION START =====
 
 async function logoutAdmin() {
   const button = document.getElementById("logoutBtn");
@@ -483,9 +484,11 @@ async function logoutAdmin() {
 
   try {
     button.disabled = true;
-    button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
+    button.innerHTML =
+      '<span class="spinner"></span> Logout হচ্ছে...';
 
     const { error } = await supabaseClient.auth.signOut();
+
     if (error) throw error;
 
     currentSession = null;
@@ -495,10 +498,15 @@ async function logoutAdmin() {
 
   } catch (e) {
     alert(e.message);
+
+  } finally {
     button.disabled = false;
+    button.classList.remove("processing");
     button.innerHTML = oldHTML;
   }
 }
+
+// ===== LOGOUT FUNCTION END =====
 
 function showAdmin() {
   document.getElementById("login").classList.add("hidden");
