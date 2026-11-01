@@ -17,21 +17,7 @@ button:disabled{opacity:.5}
 .small{color:#666;font-size:14px}
 .item{padding:12px;border-bottom:1px solid #ddd;overflow-wrap:anywhere}
 a{color:#0759a5}
-.whatsapp-button {
-  display: block;
-  background: #25D366;
-  color: white;
-  text-align: center;
-  padding: 13px;
-  margin: 12px 0;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-}
 
-.whatsapp-button:hover {
-  background: #1da851;
-}
 /* PDF Preview Viewer */
 #pdfViewer {
   background: #555;
@@ -62,65 +48,6 @@ a{color:#0759a5}
 #pdfViewer canvas {
   pointer-events: auto;
 }
- /* পেমেন্ট স্ট্যাটাসের রং */
-.status-pending {
-  color: #d97706;
-  font-weight: bold;
-}
-
-.status-approved {
-  color: #16a34a;
-  font-weight: bold;
-}
-
-.status-rejected {
-  color: #dc2626;
-  font-weight: bold;
-}
-
-/* Approve ও Reject বাটনের সাইজ */
-.approve-btn,
-.reject-btn {
-  width: auto;
-  display: inline-block;
-  padding: 10px 24px;
-  margin: 7px 6px 7px 0;
-}
-
-.approve-btn {
-  background: #16a34a;
-  color: white;
-}
-
-.reject-btn {
-  background: #dc2626;
-  color: white;
-}
-  /* Loading Spinner */
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 3px solid #ffffff80;
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  vertical-align: middle;
-  margin-right: 7px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Processing Button */
-button.processing {
-  opacity: 0.75;
-  cursor: wait;
-  pointer-events: none;
-}
 </style>
 </head>
 <body>
@@ -143,34 +70,8 @@ button.processing {
 </div>
 
 <div class="card" id="paymentBox">
-
-  <p>
-    টাইপিং সার্ভিস সম্পর্কে বিস্তারিত জানতে অথবা যেকোনো প্রয়োজনে
-    আমাদের WhatsApp-এ যোগাযোগ করুন।
-  </p>
-
-  <a
-    class="whatsapp-button"
-    href="https://wa.me/8801610362748?text=আমি%20আপনার%20টাইপিং%20সার্ভিস%20সম্পর্কে%20জানতে%20চাই"
-    target="_blank"
-    rel="noopener"
-  >
-    WhatsApp-এ যোগাযোগ করুন
-  </a>
-
-  <h3>পেমেন্ট করুন</h3>
-
-  <div class="small">
-    <p><strong>পেমেন্ট করার নিয়ম:</strong></p>
-    <ol>
-    <li>নিচে দেওয়া নাম্বারে বিকাশ অথবা রকেটে Send Money করুন।</li>
-    <li>ডকুমেন্ট-এর নির্ধারিত মূল্য অনুযায়ী টাকা পাঠান।</li>
-    <li>যে নম্বর থেকে টাকা পাঠিয়েছেন, সেটি লিখুন।</li>
-    <li>Transaction ID দিয়ে পেমেন্ট তথ্য জমা দিন।</li>
-    <li>Admin যাচাই করে অনুমোদন দিলে পছন্দ অনুযায়ী ফরমেটে ফাইলটি Download করতে পারবেন।</li>
-  </ol>
-</div>
-<p>বিকাশ / রকেট নম্বর: <strong>01890557293</strong></p>
+<h3>পেমেন্ট করুন</h3>
+<p>বিকাশ / রকেট নম্বর: <strong>এখানে আপনার নম্বর বসান</strong></p>
 <input id="payerPhone" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
 <input id="trxId" placeholder="Transaction ID">
 <button onclick="submitPayment()">পেমেন্ট তথ্য জমা দিন</button>
@@ -179,23 +80,22 @@ button.processing {
 
 <div class="card hidden" id="downloadBox">
 <h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
-<a id="downloadLink" href="#" target="_blank" rel="noopener"
-   onclick="showDownloadLoading(this)">PDF Download করুন</a>
+<a id="downloadLink" href="#" target="_blank" rel="noopener">PDF Download করুন</a>
 </div>
 </section>
 
-<section id="login" class="card hidden">
+<section id="login" class="card">
 <h2>Admin Login</h2>
 <input id="email" type="email" placeholder="Admin Email">
 <input id="password" type="password" placeholder="Password">
-<button id="loginBtn" data-custom-loading onclick="loginAdmin()">Login</button>
+<button onclick="loginAdmin()">Login</button>
 <p id="loginMessage"></p>
 </section>
 
 <section id="admin" class="hidden">
 <div class="card">
 <h2>Admin Dashboard</h2>
-<button id="logoutBtn" data-custom-loading onclick="logoutAdmin()">Logout</button>
+<button onclick="logoutAdmin()">Logout</button>
 </div>
 
 <div class="card">
@@ -210,13 +110,13 @@ button.processing {
 
 <div class="card">
 <h3>আপনার PDF তালিকা</h3>
-<button data-custom-loading onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
+<button onclick="loadDocuments()">তালিকা Refresh করুন</button>
 <div id="documents"></div>
 </div>
 
 <div class="card">
 <h3>পেমেন্ট যাচাই</h3>
-<button data-custom-loading onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
+<button onclick="loadPayments()">পেমেন্ট Refresh করুন</button>
 <div id="payments"></div>
 </div>
 </section>
@@ -275,112 +175,37 @@ async function renderPdf(pdfUrl) {
 
   try {
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+
     loading.textContent = "";
 
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
-      const viewer = document.getElementById("pdfViewer");
-      const availableWidth = viewer.clientWidth - 30;
 
       const originalViewport = page.getViewport({ scale: 1 });
+      const availableWidth = Math.min(
+        document.getElementById("pdfViewer").clientWidth - 30,
+        800
+      );
+
       const scale = availableWidth / originalViewport.width;
       const viewport = page.getViewport({ scale });
-
-      const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
 
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
-      canvas.width = Math.floor(viewport.width * pixelRatio);
-      canvas.height = Math.floor(viewport.height * pixelRatio);
-
-      canvas.style.width = "100%";
-      canvas.style.height = "auto";
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
 
       pages.appendChild(canvas);
 
       await page.render({
         canvasContext: context,
-        viewport: viewport,
-        transform: [pixelRatio, 0, 0, pixelRatio, 0, 0]
+        viewport: viewport
       }).promise;
     }
   } catch (error) {
     loading.textContent = "PDF দেখানো যাচ্ছে না: " + error.message;
     throw error;
-  }
-}
-  // সব বাটনের জন্য সাধারণ Loading Animation
-document.addEventListener("click", function(e) {
-  const button = e.target.closest("button");
-if (button && button.hasAttribute("data-custom-loading")) return;
- if (
-  !button ||
-  button.disabled ||
-  !button.onclick ||
-  button.hasAttribute("data-custom-loading")
-) return;
-
-  const originalHandler = button.onclick;
-  const oldHTML = button.innerHTML;
-
-  button.onclick = null;
-  button.disabled = true;
-  button.classList.add("processing");
-  button.innerHTML =
-    '<span class="spinner"></span> অপেক্ষা করুন...';
-
-  try {
-    const result = originalHandler.call(button, e);
-
-    Promise.resolve(result).then(() => {
-  button.disabled = false;
-  button.classList.remove("processing");
-  button.innerHTML = oldHTML;
-  button.onclick = originalHandler;
-}, () => {
-  button.disabled = false;
-  button.classList.remove("processing");
-  button.innerHTML = oldHTML;
-  button.onclick = originalHandler;
-});
-      button.disabled = false;
-      button.classList.remove("processing");
-      button.innerHTML = oldHTML;
-      button.onclick = originalHandler;
-    });
-
-  } catch (error) {
-    button.disabled = false;
-    button.classList.remove("processing");
-    button.innerHTML = oldHTML;
-    button.onclick = originalHandler;
-    throw error;
-  }
-}, true);
-  async function refreshDocuments(button) {
-  const oldHTML = button.innerHTML;
-  button.disabled = true;
-  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
-
-  try {
-    await loadDocuments();
-  } finally {
-    button.disabled = false;
-    button.innerHTML = oldHTML;
-  }
-}
-
-async function refreshPayments(button) {
-  const oldHTML = button.innerHTML;
-  button.disabled = true;
-  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
-
-  try {
-    await loadPayments();
-  } finally {
-    button.disabled = false;
-    button.innerHTML = oldHTML;
   }
 }
 async function api(action, data={}, admin=false) {
@@ -411,103 +236,67 @@ async function api(action, data={}, admin=false) {
 
 async function uploadPDF() {
   const message = document.getElementById("uploadMessage");
-  const button = document.activeElement;
-  const oldText = button.textContent;
 
   try {
-    if (!currentSession) throw new Error("প্রথমে Admin Login করুন");
+    if(!currentSession) throw new Error("প্রথমে Admin Login করুন");
 
     const file = document.getElementById("pdfFile").files[0];
-    if (!file) throw new Error("PDF ফাইল নির্বাচন করুন");
-
-    button.disabled = true;
-    button.classList.add("processing");
-    button.innerHTML = '<span class="spinner"></span> Upload হচ্ছে...';
-    message.textContent = "";
+    if(!file) throw new Error("PDF ফাইল নির্বাচন করুন");
 
     const form = new FormData();
-    form.append("file", file);
-    form.append("title", document.getElementById("pdfTitle").value);
-    form.append("description", document.getElementById("pdfDescription").value);
-    form.append("price", document.getElementById("pdfPrice").value);
+    form.append("file",file);
+    form.append("title",document.getElementById("pdfTitle").value);
+    form.append("description",document.getElementById("pdfDescription").value);
+    form.append("price",document.getElementById("pdfPrice").value);
 
-    const response = await fetch(FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization": "Bearer " + currentSession.access_token
+    const response = await fetch(FUNCTION_URL,{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_KEY,
+        "Authorization":"Bearer "+currentSession.access_token
       },
-      body: form
+      body:form
     });
 
     const result = await response.json();
 
-    if (!response.ok || result.error) {
+    if(!response.ok || result.error) {
       throw new Error(result.error || "Upload failed");
     }
 
-    message.textContent = "PDF সফলভাবে Upload হয়েছে!";
+    message.textContent="PDF সফলভাবে Upload হয়েছে!";
     loadDocuments();
 
-  } catch (e) {
-    message.textContent = e.message;
-
-  } finally {
-    button.disabled = false;
-    button.classList.remove("processing");
-    button.textContent = oldText;
+  } catch(e) {
+    message.textContent=e.message;
   }
 }
+
 async function loginAdmin() {
-  const message = document.getElementById("loginMessage");
-  const button = document.getElementById("loginBtn");
-  const oldHTML = button.innerHTML;
+  const message=document.getElementById("loginMessage");
 
   try {
-    button.disabled = true;
-    button.innerHTML = '<span class="spinner"></span> অপেক্ষা করুন...';
-    message.textContent = "";
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value
+    const {data,error}=await supabaseClient.auth.signInWithPassword({
+      email:document.getElementById("email").value,
+      password:document.getElementById("password").value
     });
 
-    if (error) throw error;
+    if(error) throw error;
 
-    currentSession = data.session;
+    currentSession=data.session;
     showAdmin();
 
-  } catch (e) {
-    message.textContent = e.message;
-
-  } finally {
-    button.disabled = false;
-    button.innerHTML = oldHTML;
+  } catch(e) {
+    message.textContent=e.message;
   }
 }
 
 async function logoutAdmin() {
-  const button = document.getElementById("logoutBtn");
-  const oldHTML = button.innerHTML;
+  await supabaseClient.auth.signOut();
+  currentSession=null;
 
-  try {
-    button.disabled = true;
-    button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
-
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
-
-    currentSession = null;
-
-    document.getElementById("admin").classList.add("hidden");
-    document.getElementById("login").classList.remove("hidden");
-
-  } catch (e) {
-    alert(e.message);
-    button.disabled = false;
-    button.innerHTML = oldHTML;
-  }
+  document.getElementById("admin").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
 }
 
 function showAdmin() {
@@ -562,40 +351,26 @@ async function createLink(documentId) {
 }
 
 async function loadPayments() {
-  const area = document.getElementById("payments");
+  const area=document.getElementById("payments");
 
   try {
-    const result = await api("admin_list_payments", {}, true);
-    area.innerHTML = "";
+    const result=await api("admin_list_payments",{},true);
+    area.innerHTML="";
 
-    for (const p of result.payments) {
-      const div = document.createElement("div");
-      div.className = "item";
+    for(const p of result.payments) {
+      const div=document.createElement("div");
+      div.className="item";
 
-      const title = p.documents?.title || "PDF";
+      const title=p.documents?.title || "PDF";
 
-      div.appendChild(document.createTextNode(
-        title + " | " + p.payer_phone + " | TrxID: " +
-        p.transaction_id + " | "
-      ));
+      div.textContent=title+" | "+p.payer_phone+
+        " | TrxID: "+p.transaction_id+" | "+p.status+" ";
 
-      const status = document.createElement("span");
-      status.textContent = p.status;
-      status.className = "status-" + p.status;
-      div.appendChild(status);
-
-      if (p.status === "pending") {
-        for (const value of ["approved", "rejected"]) {
-          const button = document.createElement("button");
-
-          button.textContent =
-            value === "approved" ? "Approve" : "Reject";
-
-          button.className =
-            value === "approved" ? "approve-btn" : "reject-btn";
-
-          button.onclick = () => updatePayment(p.id, value);
-
+      if(p.status==="pending") {
+        for(const status of ["approved","rejected"]) {
+          const button=document.createElement("button");
+          button.textContent=status==="approved"?"Approve":"Reject";
+          button.onclick=()=>updatePayment(p.id,status);
           div.appendChild(button);
         }
       }
@@ -603,8 +378,8 @@ async function loadPayments() {
       area.appendChild(div);
     }
 
-  } catch (e) {
-    area.textContent = e.message;
+  } catch(e) {
+    area.textContent=e.message;
   }
 }
 
@@ -621,15 +396,7 @@ async function updatePayment(id,status) {
     alert(e.message);
   }
 }
-function showDownloadLoading(link) {
-  const oldText = link.textContent;
 
-  link.innerHTML = '<span class="spinner"></span> Download শুরু হচ্ছে...';
-
-  setTimeout(() => {
-    link.textContent = oldText;
-  }, 3000);
-}
 async function loadClient() {
   try {
     const result=await api("get_document",{
@@ -656,66 +423,45 @@ async function loadClient() {
 }
 
 async function submitPayment() {
-  const message = document.getElementById("paymentMessage");
-  const button = document.activeElement;
-  const oldText = button.textContent;
+  const message=document.getElementById("paymentMessage");
 
   try {
-    const phone = document.getElementById("payerPhone").value.trim();
-const trx = document.getElementById("trxId").value.trim();
-
-if (!phone || !trx) {
-  message.textContent = "পেমেন্টের ফোন নম্বর ও Transaction ID দিন।";
-  return;
-}
-    button.disabled = true;
-    button.classList.add("processing");
-    button.innerHTML = '<span class="spinner"></span> জমা হচ্ছে...';
-    message.textContent = "";
-
-    await api("submit_payment", {
-      client_token: currentToken,
-      payer_phone: document.getElementById("payerPhone").value,
-      transaction_id: document.getElementById("trxId").value
+    await api("submit_payment",{
+      client_token:currentToken,
+      payer_phone:document.getElementById("payerPhone").value,
+      transaction_id:document.getElementById("trxId").value
     });
 
-    message.textContent =
+    message.textContent=
       "পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
 
-  } catch (e) {
-    message.textContent = e.message;
-
-  } finally {
-    button.disabled = false;
-    button.classList.remove("processing");
-    button.textContent = oldText;
+  } catch(e) {
+    message.textContent=e.message;
   }
 }
 
 (async function start() {
   try {
-    const { data, error } = await supabaseClient.auth.getSession();
+    const {data,error}=await supabaseClient.auth.getSession();
 
-    if (error) throw error;
+    if(error) throw error;
 
-    currentSession = data.session;
+    currentSession=data.session;
 
-    if (currentToken) {
+    if(currentToken) {
       loadClient();
+    } else {
+      document.getElementById("home").classList.add("hidden");
 
-    } else if (new URLSearchParams(location.search).get("admin") === "1") {
-      if (currentSession) {
+      if(currentSession) {
         showAdmin();
       } else {
         document.getElementById("login").classList.remove("hidden");
       }
-
-    } else {
-      document.getElementById("home").classList.remove("hidden");
     }
 
-  } catch (e) {
-    document.getElementById("loginMessage").textContent = e.message;
+  } catch(e) {
+    document.getElementById("loginMessage").textContent=e.message;
   }
 })();
 </script>
