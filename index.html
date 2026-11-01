@@ -188,14 +188,14 @@ button.processing {
 <h2>Admin Login</h2>
 <input id="email" type="email" placeholder="Admin Email">
 <input id="password" type="password" placeholder="Password">
-<button onclick="loginAdmin()">Login</button>
+<button data-custom-loading onclick="loginAdmin()">Login</button>
 <p id="loginMessage"></p>
 </section>
 
 <section id="admin" class="hidden">
 <div class="card">
 <h2>Admin Dashboard</h2>
-<button onclick="logoutAdmin()">Logout</button>
+<button data-custom-loading onclick="logoutAdmin()">Logout</button>
 </div>
 
 <div class="card">
@@ -480,11 +480,31 @@ async function loginAdmin() {
 }
 
 async function logoutAdmin() {
-  await supabaseClient.auth.signOut();
-  currentSession=null;
+  const button = document.querySelector("#admin button[onclick='logoutAdmin()']");
+  const oldHTML = button ? button.innerHTML : "Logout";
 
-  document.getElementById("admin").classList.add("hidden");
-  document.getElementById("login").classList.remove("hidden");
+  try {
+    if (button) {
+      button.disabled = true;
+      button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
+    }
+
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) throw error;
+
+    currentSession = null;
+
+    document.getElementById("admin").classList.add("hidden");
+    document.getElementById("login").classList.remove("hidden");
+
+  } catch (e) {
+    alert(e.message);
+
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = oldHTML;
+    }
+  }
 }
 
 function showAdmin() {
