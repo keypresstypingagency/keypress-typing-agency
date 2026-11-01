@@ -179,7 +179,8 @@ button.processing {
 
 <div class="card hidden" id="downloadBox">
 <h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
-<a id="downloadLink" href="#" target="_blank" rel="noopener">PDF Download করুন</a>
+<a id="downloadLink" href="#" target="_blank" rel="noopener"
+   onclick="showDownloadLoading(this)">PDF Download করুন</a>
 </div>
 </section>
 
@@ -337,42 +338,53 @@ async function api(action, data={}, admin=false) {
 
 async function uploadPDF() {
   const message = document.getElementById("uploadMessage");
+  const button = document.activeElement;
+  const oldText = button.textContent;
 
   try {
-    if(!currentSession) throw new Error("প্রথমে Admin Login করুন");
+    if (!currentSession) throw new Error("প্রথমে Admin Login করুন");
 
     const file = document.getElementById("pdfFile").files[0];
-    if(!file) throw new Error("PDF ফাইল নির্বাচন করুন");
+    if (!file) throw new Error("PDF ফাইল নির্বাচন করুন");
+
+    button.disabled = true;
+    button.classList.add("processing");
+    button.innerHTML = '<span class="spinner"></span> Upload হচ্ছে...';
+    message.textContent = "";
 
     const form = new FormData();
-    form.append("file",file);
-    form.append("title",document.getElementById("pdfTitle").value);
-    form.append("description",document.getElementById("pdfDescription").value);
-    form.append("price",document.getElementById("pdfPrice").value);
+    form.append("file", file);
+    form.append("title", document.getElementById("pdfTitle").value);
+    form.append("description", document.getElementById("pdfDescription").value);
+    form.append("price", document.getElementById("pdfPrice").value);
 
-    const response = await fetch(FUNCTION_URL,{
-      method:"POST",
-      headers:{
-        "apikey":SUPABASE_KEY,
-        "Authorization":"Bearer "+currentSession.access_token
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + currentSession.access_token
       },
-      body:form
+      body: form
     });
 
     const result = await response.json();
 
-    if(!response.ok || result.error) {
+    if (!response.ok || result.error) {
       throw new Error(result.error || "Upload failed");
     }
 
-    message.textContent="PDF সফলভাবে Upload হয়েছে!";
+    message.textContent = "PDF সফলভাবে Upload হয়েছে!";
     loadDocuments();
 
-  } catch(e) {
-    message.textContent=e.message;
+  } catch (e) {
+    message.textContent = e.message;
+
+  } finally {
+    button.disabled = false;
+    button.classList.remove("processing");
+    button.textContent = oldText;
   }
 }
-
 async function loginAdmin() {
   const message = document.getElementById("loginMessage");
   const button = document.querySelector("#login button");
@@ -523,7 +535,15 @@ async function updatePayment(id,status) {
     alert(e.message);
   }
 }
+function showDownloadLoading(link) {
+  const oldText = link.textContent;
 
+  link.innerHTML = '<span class="spinner"></span> Download শুরু হচ্ছে...';
+
+  setTimeout(() => {
+    link.textContent = oldText;
+  }, 3000);
+}
 async function loadClient() {
   try {
     const result=await api("get_document",{
@@ -550,20 +570,32 @@ async function loadClient() {
 }
 
 async function submitPayment() {
-  const message=document.getElementById("paymentMessage");
+  const message = document.getElementById("paymentMessage");
+  const button = document.activeElement;
+  const oldText = button.textContent;
 
   try {
-    await api("submit_payment",{
-      client_token:currentToken,
-      payer_phone:document.getElementById("payerPhone").value,
-      transaction_id:document.getElementById("trxId").value
+    button.disabled = true;
+    button.classList.add("processing");
+    button.innerHTML = '<span class="spinner"></span> জমা হচ্ছে...';
+    message.textContent = "";
+
+    await api("submit_payment", {
+      client_token: currentToken,
+      payer_phone: document.getElementById("payerPhone").value,
+      transaction_id: document.getElementById("trxId").value
     });
 
-    message.textContent=
+    message.textContent =
       "পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
 
-  } catch(e) {
-    message.textContent=e.message;
+  } catch (e) {
+    message.textContent = e.message;
+
+  } finally {
+    button.disabled = false;
+    button.classList.remove("processing");
+    button.textContent = oldText;
   }
 }
 
