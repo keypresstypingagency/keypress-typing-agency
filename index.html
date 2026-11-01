@@ -49,6 +49,25 @@ button.processing{opacity:.75;cursor:wait;pointer-events:none}
  .card{padding:16px}
  header{padding:18px 12px}
 }
+ 
+.loading-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: linkSpin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+@keyframes linkSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 </style>
 </head>
 
@@ -574,26 +593,35 @@ async function loadDocuments() {
       title.textContent = doc.title + " — ৳" + doc.price;
       div.appendChild(title);
 
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = "Client Link তৈরি করুন";
+      
 
-      button.onclick = function() {
-        createLink(doc.id);
-      };
+const button = document.createElement("button");
+button.type = "button";
+button.textContent = "Client Link তৈরি করুন";
 
-      div.appendChild(button);
-      area.appendChild(div);
-    }
+button.onclick = function() {
+  createLink(doc.id, button);
+};
 
-  } catch (error) {
-    area.textContent = error.message;
-  }
-}
+div.appendChild(button);
+area.appendChild(div);
+
 
 // Client Link তৈরি
-async function createLink(documentId) {
+async function createLink(documentId, button) {
+  if (button && button.disabled) return;
+
+  const originalText = button
+    ? button.textContent
+    : "Client Link তৈরি করুন";
+
   try {
+    if (button) {
+      button.disabled = true;
+      button.innerHTML =
+        '<span class="loading-spinner"></span> Link তৈরি হচ্ছে...';
+    }
+
     const result = await api(
       "admin_create_client_link",
       { document_id: documentId },
@@ -606,7 +634,13 @@ async function createLink(documentId) {
     prompt("এই Client Link কপি করে ক্লায়েন্টকে দিন:", url);
 
   } catch (error) {
-    alert(error.message);
+    alert(error.message || "Client Link তৈরি করা যায়নি।");
+
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
   }
 }
 
