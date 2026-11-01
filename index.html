@@ -313,7 +313,7 @@ async function renderPdf(pdfUrl) {
   // সব বাটনের জন্য সাধারণ Loading Animation
 document.addEventListener("click", function(e) {
   const button = e.target.closest("button");
-
+if (button && button.hasAttribute("data-custom-loading")) return;
  if (
   !button ||
   button.disabled ||
