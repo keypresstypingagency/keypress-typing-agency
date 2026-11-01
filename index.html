@@ -333,7 +333,17 @@ if (button && button.hasAttribute("data-custom-loading")) return;
   try {
     const result = originalHandler.call(button, e);
 
-    Promise.resolve(result).finally(() => {
+    Promise.resolve(result).then(() => {
+  button.disabled = false;
+  button.classList.remove("processing");
+  button.innerHTML = oldHTML;
+  button.onclick = originalHandler;
+}, () => {
+  button.disabled = false;
+  button.classList.remove("processing");
+  button.innerHTML = oldHTML;
+  button.onclick = originalHandler;
+});
       button.disabled = false;
       button.classList.remove("processing");
       button.innerHTML = oldHTML;
