@@ -4,208 +4,191 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keypress Typing Agency</title>
-
 <style>
-*{box-sizing:border-box}
 body{font-family:Arial,sans-serif;background:#f3f6fb;margin:0;color:#222}
 header{background:#123b68;color:white;padding:22px;text-align:center}
-header h1{margin:0 0 8px}
-header p{margin:0}
 main{max-width:850px;margin:25px auto;padding:15px}
 .card{background:white;padding:22px;margin:16px 0;border-radius:12px;box-shadow:0 2px 12px #0001}
-input,textarea,button{width:100%;padding:12px;margin:7px 0;border:1px solid #ccc;border-radius:7px;font:inherit}
-textarea{min-height:90px;resize:vertical}
+input,textarea,button{box-sizing:border-box;width:100%;padding:12px;margin:7px 0;border:1px solid #ccc;border-radius:7px}
 button{background:#145da0;color:white;border:0;cursor:pointer;font-weight:bold}
-button:disabled{opacity:.5;cursor:not-allowed}
-.hidden{display:none!important}
-.small{color:#666;font-size:14px;line-height:1.6}
-.hint{color:#666;font-size:13px;line-height:1.6}
+button:disabled{opacity:.5}
+.hidden{display:none}
+.small{color:#666;font-size:14px}
 .item{padding:12px;border-bottom:1px solid #ddd;overflow-wrap:anywhere}
 a{color:#0759a5}
-.whatsapp-button{display:block;background:#25D366;color:white;text-align:center;padding:13px;margin:12px 0;border-radius:8px;text-decoration:none;font-weight:bold}
-.whatsapp-button:hover{background:#1da851}
-#pdfViewer{background:#555;padding:12px;border-radius:8px;overflow:auto;user-select:none;-webkit-user-select:none}
-#pdfPages canvas{display:block;max-width:100%;height:auto;margin:12px auto;background:white;box-shadow:0 2px 8px #0005}
-#pdfViewer,#pdfViewer canvas{user-select:none;-webkit-user-select:none;-moz-user-select:none;-webkit-user-drag:none}
-#pdfViewer canvas{pointer-events:auto}
-.status-pending{color:#d97706;font-weight:bold}
-.status-approved{color:#16a34a;font-weight:bold}
-.status-rejected{color:#dc2626;font-weight:bold}
-.approve-btn,.reject-btn{width:auto;display:inline-block;padding:10px 24px;margin:7px 6px 7px 0}
-.approve-btn{background:#16a34a;color:white}
-.reject-btn{background:#dc2626;color:white}
-.spinner{display:inline-block;width:16px;height:16px;border:3px solid #ffffff80;border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:7px}
-@keyframes spin{to{transform:rotate(360deg)}}
-button.processing{opacity:.75;cursor:wait;pointer-events:none}
-.file-list{margin:10px 0;padding-left:22px}
-.file-list li{margin:10px 0;overflow-wrap:anywhere}
-.file-list a{display:inline-block;background:#145da0;color:white;padding:9px 14px;border-radius:6px;text-decoration:none}
-.file-list a:hover{background:#0d477d}
-.form-label{display:block;margin-top:12px;font-weight:bold}
-.message-error{color:#dc2626}
-.message-success{color:#16803c}
-@media(max-width:600px){
- main{margin:12px auto;padding:8px}
- .card{padding:16px}
- header{padding:18px 12px}
+.whatsapp-button {
+  display: block;
+  background: #25D366;
+  color: white;
+  text-align: center;
+  padding: 13px;
+  margin: 12px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
 }
- 
-.loading-spinner {
+.whatsapp-button:hover { background: #1da851; }
+#pdfViewer {
+  background: #555;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#pdfPages canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 12px auto;
+  background: white;
+  box-shadow: 0 2px 8px #0005;
+}
+#pdfViewer,#pdfViewer canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+}
+#pdfViewer canvas { pointer-events: auto; }
+.status-pending { color: #d97706; font-weight: bold; }
+.status-approved { color: #16a34a; font-weight: bold; }
+.status-rejected { color: #dc2626; font-weight: bold; }
+.approve-btn,.reject-btn {
+  width: auto;
   display: inline-block;
-  width: 13px;
-  height: 13px;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
+  padding: 10px 24px;
+  margin: 7px 6px 7px 0;
+}
+.approve-btn { background: #16a34a; color: white; }
+.reject-btn { background: #dc2626; color: white; }
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ffffff80;
+  border-top-color: white;
   border-radius: 50%;
-  animation: linkSpin 0.7s linear infinite;
+  animation: spin 0.7s linear infinite;
   vertical-align: middle;
   margin-right: 7px;
 }
-
-@keyframes linkSpin {
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes spin { to { transform: rotate(360deg); } }
+button.processing {
+  opacity: 0.75;
+  cursor: wait;
+  pointer-events: none;
 }
-
 </style>
 </head>
-
 <body>
 <header>
-  <h1>Keypress Typing Agency</h1>
-  <p>আপনার ফাইলটি চেক করুন। সব কিছু ঠিকঠাক থাকলে পেমেন্ট করুন</p>
+<h1>Keypress Typing Agency</h1>
+<p>আপনার ফাইলটি চেক করুন। সব কিছু ঠিকঠাক থাকলে পেমেন্ট করুন</p>
 </header>
 
 <main>
+<section id="client" class="hidden">
+<div class="card">
+<h2 id="docTitle">PDF Preview</h2>
+<p id="docDescription"></p>
+<p>মূল্য: ৳<strong id="docPrice"></strong></p>
+<div id="pdfViewer">
+  <div id="pdfPages"></div>
+  <p id="pdfLoading">PDF লোড হচ্ছে...</p>
+</div>
+<p class="small">পেমেন্ট করলেই আপনি অরিজিনাল ফাইল পেয়ে যাবেন</p>
+<button type="button" id="clientPushBtn" onclick="enablePushNotifications('client')">নোটিফিকেশন চালু করুন</button>
+<p id="clientPushMessage" class="small"></p>
+</div>
 
-  <!-- CLIENT AREA -->
-  <section id="client" class="hidden">
-    <div class="card">
-      <h2 id="docTitle">PDF Preview</h2>
-      <p id="docDescription"></p>
-      <p>মূল্য: ৳<strong id="docPrice"></strong></p>
+<div class="card" id="paymentBox">
+  <p>
+    টাইপিং সার্ভিস সম্পর্কে বিস্তারিত জানতে অথবা যেকোনো প্রয়োজনে
+    আমাদের WhatsApp-এ যোগাযোগ করুন।
+  </p>
+  <a class="whatsapp-button"
+    href="https://wa.me/8801610362748?text=আমি%20আপনার%20টাইপিং%20সার্ভিস%20সম্পর্কে%20জানতে%20চাই"
+    target="_blank" rel="noopener">
+    WhatsApp-এ যোগাযোগ করুন
+  </a>
+  <h3>পেমেন্ট করুন</h3>
+  <div class="small">
+    <p><strong>পেমেন্ট করার নিয়ম:</strong></p>
+    <ol>
+      <li>নিচে দেওয়া নাম্বারে বিকাশ অথবা রকেটে Send Money করুন।</li>
+      <li>ডকুমেন্ট-এর নির্ধারিত মূল্য অনুযায়ী টাকা পাঠান।</li>
+      <li>যে নম্বর থেকে টাকা পাঠিয়েছেন, সেটি লিখুন।</li>
+      <li>Transaction ID দিয়ে পেমেন্ট তথ্য জমা দিন।</li>
+      <li>Admin যাচাই করে অনুমোদন দিলে পছন্দ অনুযায়ী ফরমেটে ফাইলটি Download করতে পারবেন।</li>
+    </ol>
+  </div>
+  <p>বিকাশ / রকেট নম্বর: <strong>01890557293</strong></p>
+  <input id="payerPhone" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
+  <input id="trxId" placeholder="Transaction ID">
+  <button onclick="submitPayment()">পেমেন্ট তথ্য জমা দিন</button>
+  <p id="paymentMessage"></p>
+</div>
 
-      <div id="pdfViewer">
-        <div id="pdfPages"></div>
-        <p id="pdfLoading">PDF লোড হচ্ছে...</p>
-      </div>
+<div class="card hidden" id="downloadBox">
+  <h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
+  <a id="downloadLink" href="#" target="_blank" rel="noopener"
+     onclick="showDownloadLoading(this)">PDF Download করুন</a>
+</div>
+</section>
 
-      <p class="small">পেমেন্ট অনুমোদিত হলে আপনার ডেলিভারি ফাইলগুলো Download করতে পারবেন।</p>
-    </div>
+<section id="login" class="card hidden">
+  <h2>Admin Login</h2>
+  <input id="email" type="email" placeholder="Admin Email">
+  <input id="password" type="password" placeholder="Password">
+  <button id="loginBtn" data-custom-loading onclick="loginAdmin()">Login</button>
+  <p id="loginMessage"></p>
+</section>
 
-    <div class="card" id="paymentBox">
-      <p>টাইপিং সার্ভিস সম্পর্কে বিস্তারিত জানতে প্রয়োজনে আমাদের WhatsApp-এ যোগাযোগ করুন।</p>
-      <a class="whatsapp-button"
-         href="https://wa.me/8801610362748?text=আমি%20আপনার%20টাইপিং%20সার্ভিস%20সম্পর্কে%20জানতে%20চাই"
-         target="_blank" rel="noopener">WhatsApp-এ যোগাযোগ করুন</a>
+<section id="admin" class="hidden">
+<div class="card">
+  <h2>Admin Dashboard</h2>
+  <button type="button" id="adminPushBtn" onclick="enablePushNotifications('admin')">Admin নোটিফিকেশন চালু করুন</button>
+  <p id="adminPushMessage" class="small"></p>
+  <button id="logoutBtn" data-custom-loading onclick="logoutAdmin()">Logout</button>
+</div>
 
-      <h3>পেমেন্ট করুন</h3>
-      <div class="small">
-        <p><strong>পেমেন্ট করার নিয়ম:</strong></p>
-        <ol>
-          <li>নিচে দেওয়া নাম্বারে বিকাশ অথবা রকেটে Send Money করুন।</li>
-          <li>ডকুমেন্ট-এর নির্ধারিত মূল্য অনুযায়ী টাকা পাঠান।</li>
-          <li>যে নম্বর থেকে টাকা পাঠিয়েছেন, সেটি লিখুন।</li>
-          <li>Transaction ID দিয়ে পেমেন্ট তথ্য জমা দিন।</li>
-          <li>Admin যাচাই করে অনুমোদন দিলে Download File পাবেন।</li>
-        </ol>
-      </div>
+<div class="card">
+  <h3>নতুন PDF Upload</h3>
+  <input id="pdfTitle" placeholder="PDF-এর নাম">
+  <textarea id="pdfDescription" placeholder="PDF সম্পর্কে বিবরণ"></textarea>
+  <input id="pdfPrice" type="number" min="0" placeholder="মূল্য (টাকা)">
+  <input id="pdfFile" type="file" accept="application/pdf">
+  <button onclick="uploadPDF()">PDF Upload করুন</button>
+  <p id="uploadMessage"></p>
+</div>
 
-      <p>বিকাশ / রকেট নম্বর: <strong>01890557293</strong></p>
-      <input id="payerPhone" type="tel" autocomplete="tel" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
-      <input id="trxId" type="text" placeholder="Transaction ID">
-      <button id="paymentSubmitBtn" data-custom-loading onclick="submitPayment()">পেমেন্ট তথ্য জমা দিন</button>
-      <p id="paymentMessage" aria-live="polite"></p>
-    </div>
+<div class="card">
+  <h3>আপনার PDF তালিকা</h3>
+  <button data-custom-loading onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
+  <div id="documents"></div>
+</div>
 
-    <div class="card hidden" id="downloadBox">
-      <h3>পেমেন্ট অনুমোদিত হয়েছে!</h3>
-      <p>নিচের লিংকগুলো থেকে আপনার ডেলিভারি ফাইল Download করুন:</p>
-      <ul id="downloadFilesList" class="file-list"></ul>
-      <p id="noDownloadFiles" class="small hidden">
-        এই ডকুমেন্টের সঙ্গে এখনো কোনো Download File যুক্ত করা হয়নি। প্রয়োজনে আমাদের সঙ্গে যোগাযোগ করুন।
-      </p>
-      <p class="hint">Download Link নিরাপত্তার জন্য সীমিত সময় কার্যকর থাকে। Link-এর মেয়াদ শেষ হলে পেজ Refresh করুন।</p>
-    </div>
-  </section>
+<div class="card">
+  <h3>পেমেন্ট যাচাই</h3>
+  <button data-custom-loading onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
+  <div id="payments"></div>
+</div>
+</section>
 
-  <!-- ADMIN LOGIN -->
-  <section id="login" class="card hidden">
-    <h2>Admin Login</h2>
-    <input id="email" type="email" autocomplete="username" placeholder="Admin Email">
-    <input id="password" type="password" autocomplete="current-password" placeholder="Password">
-    <button id="loginBtn" data-custom-loading onclick="loginAdmin()">Login</button>
-    <p id="loginMessage" aria-live="polite"></p>
-  </section>
-
-  <!-- ADMIN DASHBOARD -->
-  <section id="admin" class="hidden">
-    <div class="card">
-      <h2>Admin Dashboard</h2>
-      <button id="logoutBtn" data-custom-loading onclick="logoutAdmin()">Logout</button>
-    </div>
-
-    <div class="card">
-      <h3>নতুন ডকুমেন্ট Upload</h3>
-
-      <label class="form-label" for="pdfTitle">ডকুমেন্টের নাম</label>
-      <input id="pdfTitle" type="text" placeholder="ডকুমেন্টের নাম">
-
-      <label class="form-label" for="pdfDescription">ডকুমেন্টের বিবরণ</label>
-      <textarea id="pdfDescription" placeholder="PDF সম্পর্কে বিবরণ"></textarea>
-
-      <label class="form-label" for="pdfPrice">মূল্য (টাকা)</label>
-      <input id="pdfPrice" type="number" min="0" step="0.01" placeholder="মূল্য (টাকা)">
-
-      <label class="form-label" for="pdfFile">১. Preview PDF (অবশ্যই PDF)</label>
-      <input id="pdfFile" type="file" accept=".pdf,application/pdf">
-
-      <label class="form-label" for="downloadFiles">২. Download Files (এক বা একাধিক)</label>
-      <input id="downloadFiles" type="file"
-        accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.zip,.rar,.txt,.csv"
-        multiple>
-
-      <p class="hint">
-        সমর্থিত ফাইল: DOC, DOCX, XLS, XLSX, PPT, PPTX, PDF, ZIP, RAR, TXT, CSV।
-        সর্বোচ্চ ১০টি Download File; প্রতিটি সর্বোচ্চ ৫০ MB।
-        Preview PDF সর্বোচ্চ ২০ MB।
-      </p>
-
-      <button id="uploadBtn" data-custom-loading onclick="uploadPDF()">ডকুমেন্ট Upload করুন</button>
-      <p id="uploadMessage" aria-live="polite"></p>
-    </div>
-
-    <div class="card">
-      <h3>আপনার সকল ডেলিভারী ডকুমেন্ট তালিকা</h3>
-      <button data-custom-loading onclick="refreshDocuments(this)">তালিকা Refresh করুন</button>
-      <div id="documents"></div>
-    </div>
-
-    <div class="card">
-      <h3>পেমেন্ট যাচাই</h3>
-      <button data-custom-loading onclick="refreshPayments(this)">পেমেন্ট Refresh করুন</button>
-      <div id="payments"></div>
-    </div>
-  </section>
-
-  <!-- HOME -->
-  <section id="home" class="card hidden">
-    <h2>Keypress Typing Agency</h2>
-    <p>আপনার দেয়া কাজটি সম্পন্ন হয়েছে কিনা দেখতে হলে আমাদের দেওয়া Client Link ব্যবহার করুন।</p>
-  </section>
-
+<section id="home" class="card hidden">
+  <h2>Keypress Typing Agency</h2>
+  <p>আপনার PDF দেখতে হলে আমাদের দেওয়া Client Link ব্যবহার করুন।</p>
+</section>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-"use strict";
-
 const SUPABASE_URL = "https://jekxjpykhqpodzktndnz.supabase.co";
 const SUPABASE_KEY = "sb_publishable_CR3iD5C1yF_CCHiJs3gqOQ_81THSBgL";
 const FUNCTION_URL = SUPABASE_URL + "/functions/v1/clever-service";
+const VAPID_PUBLIC_KEY = "BHtitLhqVyDtJ-qST8Ed-dcRtm42BJJbABRnYsIw229KIkkw41o4Nq4l3BhO_P_4vCaGGQuklA8CLGIzzKLWa-E";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -214,23 +197,8 @@ const supabaseClient = window.supabase.createClient(
 
 let currentToken = new URLSearchParams(location.search).get("token");
 let currentSession = null;
-let uploadInProgress = false;
-let paymentInProgress = false;
 
-const ALLOWED_EXTENSIONS = new Set([
-  "doc", "docx", "xls", "xlsx", "ppt", "pptx",
-  "pdf", "zip", "rar", "txt", "csv"
-]);
-
-const MAX_PREVIEW_SIZE = 20 * 1024 * 1024;
-const MAX_DOWNLOAD_SIZE = 50 * 1024 * 1024;
-const MAX_DOWNLOAD_FILES = 10;
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-// PDF preview-তে কিছু সাধারণ interaction restriction
-// স্ক্রিনশট বা অন্য পদ্ধতিতে কপি ঠেকানোর নিশ্চয়তা দেয় না।
+// PDF Preview Protection
 document.addEventListener("contextmenu", function(e) {
   if (e.target.closest("#pdfViewer")) e.preventDefault();
 });
@@ -245,39 +213,29 @@ document.addEventListener("dragstart", function(e) {
   if (e.target.closest("#pdfViewer")) e.preventDefault();
 });
 
-function setMessage(element, text, type) {
-  element.textContent = text || "";
-  element.classList.remove("message-error", "message-success");
-  if (type === "error") element.classList.add("message-error");
-  if (type === "success") element.classList.add("message-success");
-}
+// PDF.js Worker সেটআপ
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-// PDF Preview
+// PDF পেজগুলো Canvas-এ দেখানো
 async function renderPdf(pdfUrl) {
   const pages = document.getElementById("pdfPages");
   const loading = document.getElementById("pdfLoading");
-
   pages.innerHTML = "";
   loading.textContent = "PDF লোড হচ্ছে...";
 
   try {
-    const pdf = await pdfjsLib.getDocument({
-      url: pdfUrl,
-      withCredentials: false
-    }).promise;
-
+    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
     loading.textContent = "";
 
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const viewer = document.getElementById("pdfViewer");
-      const availableWidth = Math.max(250, viewer.clientWidth - 30);
-
+      const availableWidth = viewer.clientWidth - 30;
       const originalViewport = page.getViewport({ scale: 1 });
       const scale = availableWidth / originalViewport.width;
       const viewport = page.getViewport({ scale });
-      const pixelRatio = Math.max(window.devicePixelRatio || 1, 1.5);
-
+      const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
@@ -285,7 +243,6 @@ async function renderPdf(pdfUrl) {
       canvas.height = Math.floor(viewport.height * pixelRatio);
       canvas.style.width = "100%";
       canvas.style.height = "auto";
-
       pages.appendChild(canvas);
 
       await page.render({
@@ -300,16 +257,16 @@ async function renderPdf(pdfUrl) {
   }
 }
 
-// সাধারণ বাটনে Loading
+// সব বাটনের জন্য সাধারণ Loading Animation
 document.addEventListener("click", function(e) {
   const button = e.target.closest("button");
+  if (button && button.hasAttribute("data-custom-loading")) return;
 
   if (!button || button.disabled || !button.onclick ||
       button.hasAttribute("data-custom-loading")) return;
 
   const originalHandler = button.onclick;
   const oldHTML = button.innerHTML;
-
   button.onclick = null;
   button.disabled = true;
   button.classList.add("processing");
@@ -317,7 +274,6 @@ document.addEventListener("click", function(e) {
 
   try {
     const result = originalHandler.call(button, e);
-
     Promise.resolve(result).finally(() => {
       button.disabled = false;
       button.classList.remove("processing");
@@ -329,12 +285,35 @@ document.addEventListener("click", function(e) {
     button.classList.remove("processing");
     button.innerHTML = oldHTML;
     button.onclick = originalHandler;
-    console.error(error);
+    throw error;
   }
 }, true);
 
-// API
-async function api(action, data = {}, admin = false) {
+async function refreshDocuments(button) {
+  const oldHTML = button.innerHTML;
+  button.disabled = true;
+  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+  try {
+    await loadDocuments();
+  } finally {
+    button.disabled = false;
+    button.innerHTML = oldHTML;
+  }
+}
+
+async function refreshPayments(button) {
+  const oldHTML = button.innerHTML;
+  button.disabled = true;
+  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+  try {
+    await loadPayments();
+  } finally {
+    button.disabled = false;
+    button.innerHTML = oldHTML;
+  }
+}
+
+async function api(action, data={}, admin=false) {
   const headers = {
     "apikey": SUPABASE_KEY,
     "Content-Type": "application/json"
@@ -348,122 +327,116 @@ async function api(action, data = {}, admin = false) {
   const response = await fetch(FUNCTION_URL, {
     method: "POST",
     headers,
-    body: JSON.stringify({ action, ...data })
+    body: JSON.stringify({action,...data})
   });
 
-  let result;
-  try {
-    result = await response.json();
-  } catch {
-    throw new Error("Server থেকে সঠিক JSON response পাওয়া যায়নি");
-  }
-
+  const result = await response.json();
   if (!response.ok || result.error) {
-    throw new Error(result.error || ("Request failed: " + response.status));
+    throw new Error(result.error || "Request failed");
   }
-
   return result;
 }
 
-async function refreshDocuments(button) {
-  const oldHTML = button.innerHTML;
-  button.disabled = true;
-  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
+// Browser Push Notifications
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = atob(base64);
+  return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
+}
+
+async function enablePushNotifications(role) {
+  const message = document.getElementById(
+    role === "admin" ? "adminPushMessage" : "clientPushMessage"
+  );
+  const button = document.getElementById(
+    role === "admin" ? "adminPushBtn" : "clientPushBtn"
+  );
+  const oldText = button?.textContent || "নোটিফিকেশন চালু করুন";
 
   try {
-    await loadDocuments();
+    if (!("Notification" in window) ||
+        !("serviceWorker" in navigator) ||
+        !("PushManager" in window)) {
+      throw new Error("এই Browser-এ Push Notification সমর্থিত নয়। Chrome/Edge ব্যবহার করুন।");
+    }
+
+    if (role === "client" && !currentToken) {
+      throw new Error("Client Link পাওয়া যায়নি।");
+    }
+    if (role === "admin" && !currentSession) {
+      throw new Error("প্রথমে Admin Login করুন।");
+    }
+    if (Notification.permission === "denied") {
+      throw new Error("Browser Settings থেকে এই সাইটের Notification Allow করুন।");
+    }
+
+    button.disabled = true;
+    button.textContent = "চালু হচ্ছে...";
+
+    const permission = Notification.permission === "granted"
+      ? "granted"
+      : await Notification.requestPermission();
+
+    if (permission !== "granted") {
+      throw new Error("আপনি Notification অনুমতি দেননি।");
+    }
+
+    const registration = await navigator.serviceWorker.register("/service-worker.js");
+    let subscription = await registration.pushManager.getSubscription();
+
+    if (!subscription) {
+      subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+
+    const result = await api(
+      role === "admin"
+        ? "save_admin_push_subscription"
+        : "save_client_push_subscription",
+      {
+        client_token: currentToken,
+        subscription: subscription.toJSON()
+      },
+      role === "admin"
+    );
+
+    message.textContent = result.message || "নোটিফিকেশন সফলভাবে চালু হয়েছে।";
+  } catch (error) {
+    if (message) {
+      message.textContent = error.message || "নোটিফিকেশন চালু করা যায়নি।";
+    }
   } finally {
-    button.disabled = false;
-    button.innerHTML = oldHTML;
+    if (button) {
+      button.disabled = false;
+      button.textContent = oldText;
+    }
   }
 }
 
-async function refreshPayments(button) {
-  const oldHTML = button.innerHTML;
-  button.disabled = true;
-  button.innerHTML = '<span class="spinner"></span> Refresh হচ্ছে...';
-
-  try {
-    await loadPayments();
-  } finally {
-    button.disabled = false;
-    button.innerHTML = oldHTML;
-  }
-}
-
-// Preview PDF + একাধিক Download File Upload
 async function uploadPDF() {
-  if (uploadInProgress) return;
-
   const message = document.getElementById("uploadMessage");
-  const button = document.getElementById("uploadBtn");
-  const oldHTML = button.innerHTML;
+  const button = document.activeElement;
+  const oldText = button.textContent;
 
   try {
     if (!currentSession) throw new Error("প্রথমে Admin Login করুন");
 
-    const title = document.getElementById("pdfTitle").value.trim();
-    const description = document.getElementById("pdfDescription").value;
-    const priceValue = document.getElementById("pdfPrice").value;
-    const previewFile = document.getElementById("pdfFile").files[0];
+    const file = document.getElementById("pdfFile").files[0];
+    if (!file) throw new Error("PDF ফাইল নির্বাচন করুন");
 
-    const downloadFiles = Array.from(
-      document.getElementById("downloadFiles").files
-    );
-
-    if (!title) throw new Error("ডকুমেন্টের নাম লিখুন");
-
-    if (priceValue === "" ||
-        !Number.isFinite(Number(priceValue)) ||
-        Number(priceValue) < 0) {
-      throw new Error("সঠিক মূল্য লিখুন");
-    }
-
-    if (!previewFile) throw new Error("Preview PDF নির্বাচন করুন");
-
-    const previewExtension = previewFile.name.split(".").pop().toLowerCase();
-
-    if (previewExtension !== "pdf" ||
-        (previewFile.type && previewFile.type !== "application/pdf")) {
-      throw new Error("Preview File অবশ্যই PDF হতে হবে");
-    }
-
-    if (previewFile.size === 0 || previewFile.size > MAX_PREVIEW_SIZE) {
-      throw new Error("Preview PDF খালি হতে পারবে না এবং সর্বোচ্চ ২০ MB হতে পারবে");
-    }
-
-    if (downloadFiles.length > MAX_DOWNLOAD_FILES) {
-      throw new Error("সর্বোচ্চ ১০টি Download File নির্বাচন করতে পারবেন");
-    }
-
-    for (const file of downloadFiles) {
-      const extension = file.name.split(".").pop().toLowerCase();
-
-      if (!ALLOWED_EXTENSIONS.has(extension)) {
-        throw new Error("অসমর্থিত ফাইলের ফরম্যাট: " + file.name);
-      }
-
-      if (file.size === 0 || file.size > MAX_DOWNLOAD_SIZE) {
-        throw new Error(file.name + " খালি অথবা ৫০ MB-এর বেশি");
-      }
-    }
-
-    uploadInProgress = true;
     button.disabled = true;
     button.classList.add("processing");
     button.innerHTML = '<span class="spinner"></span> Upload হচ্ছে...';
-    setMessage(message, "");
+    message.textContent = "";
 
     const form = new FormData();
-
-    form.append("preview_file", previewFile, previewFile.name);
-    form.append("title", title);
-    form.append("description", description);
-    form.append("price", priceValue);
-
-    downloadFiles.forEach(file => {
-      form.append("download_files", file, file.name);
-    });
+    form.append("file", file);
+    form.append("title", document.getElementById("pdfTitle").value);
+    form.append("description", document.getElementById("pdfDescription").value);
+    form.append("price", document.getElementById("pdfPrice").value);
 
     const response = await fetch(FUNCTION_URL, {
       method: "POST",
@@ -474,45 +447,22 @@ async function uploadPDF() {
       body: form
     });
 
-    let result;
-
-    try {
-      result = await response.json();
-    } catch {
-      throw new Error("Upload server থেকে সঠিক response পাওয়া যায়নি");
-    }
-
+    const result = await response.json();
     if (!response.ok || result.error) {
       throw new Error(result.error || "Upload failed");
     }
 
-    setMessage(
-      message,
-      "সফলভাবে Upload হয়েছে! " +
-      (result.download_file_count ?? downloadFiles.length) +
-      "টি Download File যুক্ত হয়েছে।",
-      "success"
-    );
-
-    document.getElementById("pdfTitle").value = "";
-    document.getElementById("pdfDescription").value = "";
-    document.getElementById("pdfPrice").value = "";
-    document.getElementById("pdfFile").value = "";
-    document.getElementById("downloadFiles").value = "";
-
-    await loadDocuments();
-
-  } catch (error) {
-    setMessage(message, "সমস্যা: " + error.message, "error");
+    message.textContent = "PDF সফলভাবে Upload হয়েছে!";
+    loadDocuments();
+  } catch (e) {
+    message.textContent = e.message;
   } finally {
-    uploadInProgress = false;
     button.disabled = false;
     button.classList.remove("processing");
-    button.innerHTML = oldHTML;
+    button.textContent = oldText;
   }
 }
 
-// Admin Login
 async function loginAdmin() {
   const message = document.getElementById("loginMessage");
   const button = document.getElementById("loginBtn");
@@ -521,27 +471,24 @@ async function loginAdmin() {
   try {
     button.disabled = true;
     button.innerHTML = '<span class="spinner"></span> অপেক্ষা করুন...';
-    setMessage(message, "");
+    message.textContent = "";
 
     const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: document.getElementById("email").value.trim(),
+      email: document.getElementById("email").value,
       password: document.getElementById("password").value
     });
 
     if (error) throw error;
-
     currentSession = data.session;
     showAdmin();
-
-  } catch (error) {
-    setMessage(message, error.message, "error");
+  } catch (e) {
+    message.textContent = e.message;
   } finally {
     button.disabled = false;
     button.innerHTML = oldHTML;
   }
 }
 
-// Admin Logout
 async function logoutAdmin() {
   const button = document.getElementById("logoutBtn");
   const oldHTML = button.innerHTML;
@@ -549,17 +496,14 @@ async function logoutAdmin() {
   try {
     button.disabled = true;
     button.innerHTML = '<span class="spinner"></span> Logout হচ্ছে...';
-
     const { error } = await supabaseClient.auth.signOut();
     if (error) throw error;
 
     currentSession = null;
     document.getElementById("admin").classList.add("hidden");
     document.getElementById("login").classList.remove("hidden");
-
-  } catch (error) {
-    alert(error.message);
-  } finally {
+  } catch (e) {
+    alert(e.message);
     button.disabled = false;
     button.innerHTML = oldHTML;
   }
@@ -572,8 +516,6 @@ function showAdmin() {
   loadPayments();
 }
 
-
-// Admin Document List
 async function loadDocuments() {
   const area = document.getElementById("documents");
 
@@ -581,75 +523,40 @@ async function loadDocuments() {
     const result = await api("admin_list_documents", {}, true);
     area.innerHTML = "";
 
-    if (!result.documents || result.documents.length === 0) {
-      area.textContent = "এখনো কোনো ডকুমেন্ট Upload করা হয়নি।";
-      return;
-    }
-
     for (const doc of result.documents) {
       const div = document.createElement("div");
       div.className = "item";
-
-      const title = document.createElement("strong");
-      title.textContent = doc.title + " — ৳" + doc.price;
-      div.appendChild(title);
+      div.textContent = doc.title + " — ৳" + doc.price + " ";
 
       const button = document.createElement("button");
-      button.type = "button";
       button.textContent = "Client Link তৈরি করুন";
-
-      button.onclick = function() {
-        createLink(doc.id, button);
-      };
+      button.onclick = () => createLink(doc.id);
 
       div.appendChild(button);
       area.appendChild(div);
     }
-
-  } catch (error) {
-    area.textContent = error.message;
+  } catch (e) {
+    area.textContent = e.message;
   }
 }
 
-// Client Link তৈরি
-async function createLink(documentId, button) {
-  if (button && button.disabled) return;
-
-  const originalText = button
-    ? button.textContent
-    : "Client Link তৈরি করুন";
-
+async function createLink(documentId) {
   try {
-    if (button) {
-      button.disabled = true;
-      button.innerHTML =
-        '<span class="loading-spinner"></span> Link তৈরি হচ্ছে...';
-    }
-
     const result = await api(
       "admin_create_client_link",
-      { document_id: documentId },
+      {document_id: documentId},
       true
     );
 
     const url = location.origin + location.pathname +
-      "?token=" + encodeURIComponent(result.client_link.client_token);
+      "?token=" + result.client_link.client_token;
 
     prompt("এই Client Link কপি করে ক্লায়েন্টকে দিন:", url);
-
-  } catch (error) {
-    alert(error.message || "Client Link তৈরি করা যায়নি।");
-
-  } finally {
-    if (button) {
-      button.disabled = false;
-      button.textContent = originalText;
-    }
+  } catch (e) {
+    alert(e.message);
   }
 }
 
-
-// Admin Payment List
 async function loadPayments() {
   const area = document.getElementById("payments");
 
@@ -657,74 +564,57 @@ async function loadPayments() {
     const result = await api("admin_list_payments", {}, true);
     area.innerHTML = "";
 
-    if (!result.payments || result.payments.length === 0) {
-      area.textContent = "এখনো কোনো পেমেন্ট জমা হয়নি।";
-      return;
-    }
-
-    for (const payment of result.payments) {
+    for (const p of result.payments) {
       const div = document.createElement("div");
       div.className = "item";
-
-      const title = payment.documents?.title || "ডকুমেন্ট";
+      const title = p.documents?.title || "PDF";
 
       div.appendChild(document.createTextNode(
-        title + " | " + payment.payer_phone +
-        " | TrxID: " + payment.transaction_id + " | "
+        title + " | " + p.payer_phone + " | TrxID: " +
+        p.transaction_id + " | "
       ));
 
       const status = document.createElement("span");
-      status.textContent = payment.status;
-      status.className = "status-" + payment.status;
+      status.textContent = p.status;
+      status.className = "status-" + p.status;
       div.appendChild(status);
 
-      if (payment.status === "pending") {
-        const approveButton = document.createElement("button");
-        approveButton.type = "button";
-        approveButton.textContent = "Approve";
-        approveButton.className = "approve-btn";
-
-        approveButton.onclick = function() {
-          updatePayment(payment.id, "approved");
-        };
-
-        const rejectButton = document.createElement("button");
-        rejectButton.type = "button";
-        rejectButton.textContent = "Reject";
-        rejectButton.className = "reject-btn";
-
-        rejectButton.onclick = function() {
-          updatePayment(payment.id, "rejected");
-        };
-
-        div.appendChild(approveButton);
-        div.appendChild(rejectButton);
+      if (p.status === "pending") {
+        for (const value of ["approved", "rejected"]) {
+          const button = document.createElement("button");
+          button.textContent = value === "approved" ? "Approve" : "Reject";
+          button.className = value === "approved" ? "approve-btn" : "reject-btn";
+          button.onclick = () => updatePayment(p.id, value);
+          div.appendChild(button);
+        }
       }
-
       area.appendChild(div);
     }
-
-  } catch (error) {
-    area.textContent = error.message;
+  } catch (e) {
+    area.textContent = e.message;
   }
 }
 
-// Payment Approve / Reject
-async function updatePayment(paymentId, status) {
+async function updatePayment(id, status) {
   try {
     await api("admin_update_payment", {
-      payment_id: paymentId,
-      status: status
+      payment_id: id,
+      status
     }, true);
-
-    await loadPayments();
-
-  } catch (error) {
-    alert(error.message);
+    loadPayments();
+  } catch (e) {
+    alert(e.message);
   }
 }
 
-// Client Document View
+function showDownloadLoading(link) {
+  const oldText = link.textContent;
+  link.innerHTML = '<span class="spinner"></span> Download শুরু হচ্ছে...';
+  setTimeout(() => {
+    link.textContent = oldText;
+  }, 3000);
+}
+
 async function loadClient() {
   try {
     const result = await api("get_document", {
@@ -732,156 +622,79 @@ async function loadClient() {
     });
 
     document.getElementById("client").classList.remove("hidden");
-
-    document.getElementById("docTitle").textContent =
-      result.document.title;
-
+    document.getElementById("docTitle").textContent = result.document.title;
     document.getElementById("docDescription").textContent =
       result.document.description || "";
-
-    document.getElementById("docPrice").textContent =
-      result.document.price;
+    document.getElementById("docPrice").textContent = result.document.price;
 
     await renderPdf(result.preview_url);
 
-    if (result.approved) {
+    if (result.approved && result.download_url) {
       document.getElementById("paymentBox").classList.add("hidden");
       document.getElementById("downloadBox").classList.remove("hidden");
-
-      const list = document.getElementById("downloadFilesList");
-      const emptyMessage = document.getElementById("noDownloadFiles");
-
-      list.innerHTML = "";
-
-      const files = Array.isArray(result.download_files)
-        ? result.download_files
-        : (result.download_url
-            ? [{
-                file_name: "Download File",
-                download_url: result.download_url
-              }]
-            : []);
-
-      if (files.length === 0) {
-        emptyMessage.classList.remove("hidden");
-      } else {
-        emptyMessage.classList.add("hidden");
-
-        files.forEach(file => {
-          if (!file.download_url) return;
-
-          const li = document.createElement("li");
-          const link = document.createElement("a");
-
-          link.href = file.download_url;
-          link.target = "_blank";
-          link.rel = "noopener";
-          link.textContent = "Download: " + (file.file_name || "File");
-
-          li.appendChild(link);
-          list.appendChild(li);
-        });
-
-        if (list.children.length === 0) {
-          emptyMessage.classList.remove("hidden");
-        }
-      }
+      document.getElementById("downloadLink").href = result.download_url;
     }
-
-  } catch (error) {
-    document.getElementById("client").classList.add("hidden");
+  } catch (e) {
     document.getElementById("home").classList.remove("hidden");
-
-    document.getElementById("home").textContent =
-      "ডকুমেন্ট লোড করা যায়নি: " + error.message;
+    document.getElementById("home").textContent = e.message;
   }
 }
 
-// Payment Submit
 async function submitPayment() {
-  if (paymentInProgress) return;
-
   const message = document.getElementById("paymentMessage");
-  const button = document.getElementById("paymentSubmitBtn");
-  const oldHTML = button.innerHTML;
+  const button = document.activeElement;
+  const oldText = button.textContent;
 
   try {
     const phone = document.getElementById("payerPhone").value.trim();
-    const transactionId = document.getElementById("trxId").value.trim();
+    const trx = document.getElementById("trxId").value.trim();
 
-    if (!phone || !transactionId) {
-      setMessage(message, "পেমেন্টের ফোন নম্বর ও Transaction ID দিন।", "error");
+    if (!phone || !trx) {
+      message.textContent = "পেমেন্টের ফোন নম্বর ও Transaction ID দিন।";
       return;
     }
 
-    paymentInProgress = true;
     button.disabled = true;
     button.classList.add("processing");
     button.innerHTML = '<span class="spinner"></span> জমা হচ্ছে...';
-
-    setMessage(message, "");
+    message.textContent = "";
 
     await api("submit_payment", {
       client_token: currentToken,
-      payer_phone: phone,
-      transaction_id: transactionId
+      payer_phone: document.getElementById("payerPhone").value,
+      transaction_id: document.getElementById("trxId").value
     });
 
-    setMessage(
-      message,
-      "পেমেন্ট তথ্য সফলভাবে জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।",
-      "success"
-    );
-
-    button.disabled = true;
-    button.textContent = "পেমেন্ট তথ্য জমা হয়েছে";
-
-  } catch (error) {
-    setMessage(message, error.message, "error");
-
+    message.textContent =
+      "পেমেন্ট তথ্য জমা হয়েছে। Admin যাচাই করার পর Download চালু হবে।";
+  } catch (e) {
+    message.textContent = e.message;
   } finally {
-    paymentInProgress = false;
-
-    if (!button.textContent.includes("জমা হয়েছে")) {
-      button.disabled = false;
-      button.classList.remove("processing");
-      button.innerHTML = oldHTML;
-    } else {
-      button.classList.remove("processing");
-    }
+    button.disabled = false;
+    button.classList.remove("processing");
+    button.textContent = oldText;
   }
 }
 
-// Initial Routing / Session Restore
 (async function start() {
   try {
     const { data, error } = await supabaseClient.auth.getSession();
     if (error) throw error;
-
     currentSession = data.session;
 
     if (currentToken) {
-      await loadClient();
-
+      loadClient();
     } else if (new URLSearchParams(location.search).get("admin") === "1") {
       if (currentSession) {
         showAdmin();
       } else {
         document.getElementById("login").classList.remove("hidden");
       }
-
     } else {
       document.getElementById("home").classList.remove("hidden");
     }
-
-  } catch (error) {
-    document.getElementById("login").classList.remove("hidden");
-
-    setMessage(
-      document.getElementById("loginMessage"),
-      error.message,
-      "error"
-    );
+  } catch (e) {
+    document.getElementById("loginMessage").textContent = e.message;
   }
 })();
 </script>
