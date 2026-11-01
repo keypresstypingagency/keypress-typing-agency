@@ -62,7 +62,32 @@ a{color:#0759a5}
 #pdfViewer canvas {
   pointer-events: auto;
 }
-  .approve-btn {
+ /* পেমেন্ট স্ট্যাটাসের রং */
+.status-pending {
+  color: #d97706;
+  font-weight: bold;
+}
+
+.status-approved {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+/* Approve ও Reject বাটনের সাইজ */
+.approve-btn,
+.reject-btn {
+  width: auto;
+  display: inline-block;
+  padding: 10px 24px;
+  margin: 7px 6px 7px 0;
+}
+
+.approve-btn {
   background: #16a34a;
   color: white;
 }
@@ -402,31 +427,40 @@ async function createLink(documentId) {
 }
 
 async function loadPayments() {
-  const area=document.getElementById("payments");
+  const area = document.getElementById("payments");
 
   try {
-    const result=await api("admin_list_payments",{},true);
-    area.innerHTML="";
+    const result = await api("admin_list_payments", {}, true);
+    area.innerHTML = "";
 
-    for(const p of result.payments) {
-      const div=document.createElement("div");
-      div.className="item";
+    for (const p of result.payments) {
+      const div = document.createElement("div");
+      div.className = "item";
 
-      const title=p.documents?.title || "PDF";
+      const title = p.documents?.title || "PDF";
 
-      div.textContent=title+" | "+p.payer_phone+
-        " | TrxID: "+p.transaction_id+" | "+p.status+" ";
+      div.appendChild(document.createTextNode(
+        title + " | " + p.payer_phone + " | TrxID: " +
+        p.transaction_id + " | "
+      ));
 
-      if(p.status==="pending") {
-        for(const status of ["approved","rejected"]) {
-          const button=document.createElement("button");
-         button.textContent = status === "approved" ? "Approve" : "Reject";
+      const status = document.createElement("span");
+      status.textContent = p.status;
+      status.className = "status-" + p.status;
+      div.appendChild(status);
 
-button.className = status === "approved"
-  ? "approve-btn"
-  : "reject-btn";
+      if (p.status === "pending") {
+        for (const value of ["approved", "rejected"]) {
+          const button = document.createElement("button");
 
-button.onclick = () => updatePayment(p.id, status);
+          button.textContent =
+            value === "approved" ? "Approve" : "Reject";
+
+          button.className =
+            value === "approved" ? "approve-btn" : "reject-btn";
+
+          button.onclick = () => updatePayment(p.id, value);
+
           div.appendChild(button);
         }
       }
@@ -434,8 +468,8 @@ button.onclick = () => updatePayment(p.id, status);
       area.appendChild(div);
     }
 
-  } catch(e) {
-    area.textContent=e.message;
+  } catch (e) {
+    area.textContent = e.message;
   }
 }
 
