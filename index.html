@@ -310,6 +310,39 @@ async function renderPdf(pdfUrl) {
     throw error;
   }
 }
+  // সব বাটনের জন্য সাধারণ Loading Animation
+document.addEventListener("click", function(e) {
+  const button = e.target.closest("button");
+
+  if (!button || button.disabled || !button.onclick) return;
+
+  const originalHandler = button.onclick;
+  const oldHTML = button.innerHTML;
+
+  button.onclick = null;
+  button.disabled = true;
+  button.classList.add("processing");
+  button.innerHTML =
+    '<span class="spinner"></span> অপেক্ষা করুন...';
+
+  try {
+    const result = originalHandler.call(button, e);
+
+    Promise.resolve(result).finally(() => {
+      button.disabled = false;
+      button.classList.remove("processing");
+      button.innerHTML = oldHTML;
+      button.onclick = originalHandler;
+    });
+
+  } catch (error) {
+    button.disabled = false;
+    button.classList.remove("processing");
+    button.innerHTML = oldHTML;
+    button.onclick = originalHandler;
+    throw error;
+  }
+}, true);
 async function api(action, data={}, admin=false) {
   const headers = {
     "apikey": SUPABASE_KEY,
